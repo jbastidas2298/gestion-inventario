@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "sourceMap": true,
+      "outDir": "./dist/out-tsc",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "module": "es2020",
+      "target": "es2017",
+      "moduleResolution": "node",
+      "importHelpers": true,
+      "lib": [
+        "es2018",
+        "dom"
+      ]
+    }
+  }
