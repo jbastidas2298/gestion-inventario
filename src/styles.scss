@@ -2,9 +2,18 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-.error-message {
-    color: #f44336;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    text-align: center;
-  }
+.error-snackbar {
+  background-color: #f44336 !important; 
+}
+
+.success-snackbar {
+  background-color: #4caf50 !important; 
+}
+
+:root {
+  --primary-color: #30B86B;
+  --secondary-color: #f1f1f1;
+  --gradient: linear-gradient(-135deg, var(--primary-color) 50%, var(--secondary-color) 50%);
+  --text-color: #ffffff; 
+  --hover-color: #279957; 
+}

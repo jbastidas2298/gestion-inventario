@@ -1,0 +1,14 @@
+<div class="inicio-container">
+  <div class="dashboard-grid">
+    <div class="dashboard-item" *ngIf="isAdmin()" (click)="navigateTo('/configuracion')">
+      <mat-icon class="dashboard-icon">settings</mat-icon>
+      <h3>Configuración</h3>
+      <p>Gestión de Configuraciones</p>
+    </div>
+    <div class="dashboard-item" (click)="navigateTo('/inventario')">
+      <mat-icon class="dashboard-icon">inventory</mat-icon>
+      <h3>Inventario</h3>
+      <p>Gestión de Inventario</p>
+    </div>
+  </div>
+</div>

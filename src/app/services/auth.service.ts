@@ -14,19 +14,6 @@ export class AuthService {
 
   login(username: string, password: string): Observable<any> {
     const body = { username, password };
-    return this.http.post(this.loginUrl, body)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Ocurrió un error inesperado.';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Código del error: ${error.status}\nMensaje: ${error.message}`;
-    }
-    return throwError(() => new Error(errorMessage));
+    return this.http.post(this.loginUrl, body);
   }
 }

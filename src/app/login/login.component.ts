@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-
+import { NotificationService } from '../services/Notification.service';
+import { UserService } from '../services/user.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +13,13 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-  errorMessage: string | null = null;
-
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationService,
+    private userService: UserService
 
   ) 
   {
@@ -30,21 +32,23 @@ export class LoginComponent {
   onLogin() {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-
+  
       this.authService.login(username, password).subscribe({
         next: (response) => {
-          localStorage.setItem('token', response.token);
-          this.router.navigate(['/home']);
-        },
-        error: (error) => {
-          if (error.error && error.error.mensaje) {
-            this.errorMessage = error.error.mensaje;
-          } else {
-            this.errorMessage = 'Error desconocido. Por favor, inténtalo de nuevo más tarde.';
+          if (response && response.token) {
+            localStorage.setItem('token', response.token);
+  
+            const decodedToken: any = jwtDecode(response.token);
+            const roles = decodedToken.roles || [];
+            const usuario = decodedToken.sub || decodedToken.username;
+  
+            this.userService.setUserDetails(roles, usuario);
+  
+            this.notificationService.showSuccess('Inicio de sesión exitoso');
+            this.router.navigate(['/inicio']);
           }
-          debugger;
-        }
+        },
       });
     }
   }
-}
+}  

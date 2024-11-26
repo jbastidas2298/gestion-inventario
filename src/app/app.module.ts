@@ -13,13 +13,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LeyendaComponent } from './leyenda/leyenda.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ErrorInterceptor } from './services/errorInterceptor.service';
+import { CommonModule } from '@angular/common';
+import { InicioComponent } from './inicio/inicio.component';
+import { MatIconModule } from '@angular/material/icon';
+import { BarraComponent } from './barra/barra.component';
+
 
 @NgModule({
-  declarations: [		
+  declarations: [			
     AppComponent,
     LoginComponent,
-    LeyendaComponent   ],
+    LeyendaComponent,
+    InicioComponent,
+    BarraComponent
+   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -31,9 +42,19 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     ToastModule,
     NgxSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    CommonModule,
+    MatIconModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
