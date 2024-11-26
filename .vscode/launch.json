@@ -7,8 +7,7 @@
       "type": "pwa-chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/",
-      "webRoot": "${workspaceFolder}/src",
+      "url": "http://localhost:4200/"
     },
     {
       "name": "ng test",
