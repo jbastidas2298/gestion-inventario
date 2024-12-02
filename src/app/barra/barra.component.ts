@@ -9,13 +9,31 @@ import { UserService } from '../services/user.service';
 })
 
 export class BarraComponent {
-  username: string;
+  username: string = '';
 
   constructor(private router: Router, private userService: UserService) {
-    this.username = this.userService.getUsername(); 
+
   }
   ngOnInit() {
+    this.obtenerNombreUsuario();
   }
+
+  obtenerNombreUsuario() {
+    const usernameLocal = this.userService.getUsername(); 
+    this.userService.getNombreCompleto(usernameLocal).subscribe({
+      next: (response: any) => { 
+        this.username = response?.nombreCompleto ? response.nombreCompleto : usernameLocal; 
+      },
+      error: (error) => {
+        this.username = usernameLocal; 
+      }
+    });
+  }
+  
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
 
   logout(): void {
     localStorage.clear(); 

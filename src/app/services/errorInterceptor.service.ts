@@ -12,18 +12,24 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta de nuevo.';
-        
-        if (error.error instanceof ErrorEvent) {
-          errorMessage = `Error: ${error.error.message}`;
-        } else if (error.status) {
-          errorMessage = `Error ${error.status}: ${error.message}`;
-          if (error.error && typeof error.error === 'object' && error.error.mensaje) {
-            errorMessage = `Código del error: ${error.error.codigo}. Mensaje: ${error.error.mensaje}`;
+        if (error instanceof HttpErrorResponse) {
+          let errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta de nuevo.';
+          
+          if (error.status === 200) {
+            return throwError(() => null); 
           }
-        }
 
-        this.notificationService.showError(errorMessage);
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}`;
+          } else if (error.status) {
+            errorMessage = `Error ${error.status}: ${error.message}`;
+            if (error.error && typeof error.error === 'object' && error.error.mensaje) {
+              errorMessage = `Código del error: ${error.error.codigo}. Mensaje: ${error.error.mensaje}`;
+            }
+          }
+
+          this.notificationService.showError(errorMessage);
+        }
 
         return throwError(() => error);
       })
