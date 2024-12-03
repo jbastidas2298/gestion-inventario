@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { ConfiguracionMenuComponent } from './configuracion-menu/configuracion-menu.component';
 import { ConfiguracionUsuarioComponent } from './configuracion-usuario/configuracion-usuario.component';
+import { ConfiguracionAreasComponent } from './configuracion-areas/configuracion-areas.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
   { path: 'configuracion', component: ConfiguracionMenuComponent },
   { path: 'configuracionUsuarios', component: ConfiguracionUsuarioComponent },
+  { path: 'configuracionAreas', component: ConfiguracionAreasComponent },
 
 ];
 

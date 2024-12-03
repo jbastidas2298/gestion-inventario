@@ -1,5 +1,7 @@
-<app-barra *ngIf="!isLoginPage()"></app-barra>
-<div class="main-container">
-  <router-outlet></router-outlet>
+<div class="page-container">
+  <app-barra *ngIf="!isLoginPage()"></app-barra>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+  <app-leyenda></app-leyenda>
 </div>
-<app-leyenda></app-leyenda>

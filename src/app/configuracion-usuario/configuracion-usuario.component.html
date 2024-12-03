@@ -3,7 +3,7 @@
     <span class="toolbar-title">Gestión de Usuarios</span>
   </div>
   <div class="usuarios-container">
-    <button mat-raised-button color="primary" (click)="agregarUsuario()">Agregar Usuario</button>
+    <button mat-raised-button class="custom-green-button" (click)="agregarUsuario()">Agregar Usuario</button>
     <input type="text" [(ngModel)]="filtro" (keyup)="aplicarFiltro()" placeholder="Filtrar por nombre completo" />
 
     <table mat-table [dataSource]="dataSource" class="usuarios-table">

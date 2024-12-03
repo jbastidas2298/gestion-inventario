@@ -27,8 +27,8 @@
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
-    width: 90%; /* Asegura que se ajuste al tamaño del contenedor */
-  
+    width: 90%; 
+
     &:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -51,14 +51,13 @@
     }
   }
   
-  /* Ajuste para pantallas pequeñas */
   @media (max-width: 600px) {
     .dashboard-grid {
-      grid-template-columns: 1fr; /* Una sola columna */
+      grid-template-columns: 1fr; 
     }
   
     .dashboard-item {
-      width: 100%; /* Ocupa todo el ancho disponible */
+      width: 100%; 
     }
   }
   

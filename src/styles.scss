@@ -17,3 +17,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --text-color: #ffffff; 
   --hover-color: #279957; 
 }
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+.main-content {
+  flex: 1; 
+}

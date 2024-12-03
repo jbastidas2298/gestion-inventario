@@ -29,11 +29,11 @@ import { ConfiguracionUsuarioComponent } from './configuracion-usuario/configura
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
-
+import { ConfiguracionAreasComponent } from './configuracion-areas/configuracion-areas.component';
+import { AreaDialogComponent } from './area-dialog/area-dialog.component';
 
 @NgModule({
-  declarations: [						
+  declarations: [								
     AppComponent,
     LoginComponent,
     LeyendaComponent,
@@ -41,7 +41,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     BarraComponent,
     ConfiguracionMenuComponent,
     ConfiguracionUsuarioComponent,
-    EditarUsuarioDialogComponent
+    EditarUsuarioDialogComponent,
+    ConfiguracionAreasComponent,
+    AreaDialogComponent
    ],
   imports: [
     BrowserModule,

@@ -19,7 +19,7 @@ export class EditarUsuarioDialogComponent {
     this.usuarioForm = this.fb.group({
       id: [data.usuario.id],
       nombreUsuario: [data.usuario.nombreUsuario, [Validators.required, Validators.minLength(3)]],
-      contrasena: [data.esNuevo ? data.usuario.contrasena : '', [Validators.required, Validators.minLength(6)]],
+      contrasena: [data.esNuevo ? data.usuario.contrasena : '', [ Validators.minLength(6)]],
       correo: [data.usuario.correo, [Validators.required, Validators.email]],
       activo: [data.usuario.activo],
       nombreCompleto: [data.usuario.nombreCompleto, [Validators.required]],

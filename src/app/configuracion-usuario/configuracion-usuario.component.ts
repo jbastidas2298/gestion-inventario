@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '../services/user.service'; // Asegúrate de ajustar el path
+import { UserService } from '../services/user.service'; 
 import { Usuario } from '../dominio/usuario';
 import { MatTableDataSource } from '@angular/material/table';
 import { EditarUsuarioDialogComponent } from '../editar-usuario-dialog/editar-usuario-dialog.component';
