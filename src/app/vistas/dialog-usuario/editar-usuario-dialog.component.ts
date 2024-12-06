@@ -1,7 +1,7 @@
 import { Component, Inject} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Usuario } from '../dominio/usuario';
+import { Usuario } from 'src/app/dominio/usuario';
 @Component({
   selector: 'app-editar-usuario-dialog',
   templateUrl: './editar-usuario-dialog.component.html',

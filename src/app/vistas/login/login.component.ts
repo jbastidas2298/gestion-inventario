@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../services/Notification.service';
-import { UserService } from '../services/user.service';
 import { jwtDecode } from 'jwt-decode';
+import { AuthService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/Notification.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',

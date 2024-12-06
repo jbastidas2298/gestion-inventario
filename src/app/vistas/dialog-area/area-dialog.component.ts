@@ -1,8 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AreaService } from '../services/area.service';
-import { Area } from '../dominio/area';
-import { Usuario } from '../dominio/usuario';
+import { Area } from 'src/app/dominio/area';
+import { Usuario } from 'src/app/dominio/usuario';
+import { AreaService } from 'src/app/services/area.service';
+
 
 @Component({
   selector: 'app-area-dialog',

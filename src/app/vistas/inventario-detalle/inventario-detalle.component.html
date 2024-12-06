@@ -1,0 +1,47 @@
+<div class="inicio-container">
+  <div class="detalle-container">
+    <div class="header">
+      <h1>Detalle del Artículo</h1>
+      <img [src]="qrCodeUrl" alt="Código QR" *ngIf="qrCodeUrl" class="qr-code" />
+
+    </div>
+
+
+    <div class="detalle-section">
+      <h2>Información del Artículo</h2>
+      <ul>
+        <li><strong>Nombre:</strong> {{ articulo?.articulo?.nombre }}</li>
+        <li><strong>Código Origen:</strong> {{ articulo?.articulo?.codigoOrigen }}</li>
+        <li><strong>Código Interno:</strong> {{ articulo?.articulo?.codigoInterno }}</li>
+        <li><strong>Descripción:</strong> {{ articulo?.articulo?.descripcion }}</li>
+        <li><strong>Marca:</strong> {{ articulo?.articulo?.marca }}</li>
+        <li><strong>Estado:</strong> {{ articulo?.articulo?.estado }}</li>
+        <li><strong>Observación:</strong> {{ articulo?.articulo?.observacion }}</li>
+      </ul>
+    </div>
+
+    <div class="detalle-section">
+      <h2>Usuario Asignado</h2>
+      <p><strong>Nombre:</strong> {{ articulo?.usuarioAsignado?.nombreCompleto }}</p>
+      <p><strong>Correo:</strong> {{ articulo?.usuarioAsignado?.correo }}</p>
+    </div>
+
+    <div class="detalle-section">
+      <h2>Historial</h2>
+      <ul>
+        <li *ngFor="let history of articulo?.historial">
+          <strong>{{ history.tipoOperacion }}:</strong> {{ history.descripcion }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="detalle-section">
+      <h2>Archivos</h2>
+      <ul>
+        <li *ngFor="let archivo of articulo?.archivos">
+          <strong>{{ archivo.tipo }}:</strong> {{ archivo.path }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

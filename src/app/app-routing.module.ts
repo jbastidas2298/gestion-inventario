@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { InicioComponent } from './inicio/inicio.component';
-import { ConfiguracionMenuComponent } from './configuracion-menu/configuracion-menu.component';
-import { ConfiguracionUsuarioComponent } from './configuracion-usuario/configuracion-usuario.component';
-import { ConfiguracionAreasComponent } from './configuracion-areas/configuracion-areas.component';
+import { LoginComponent } from './vistas/login/login.component';
+import { InicioComponent } from './vistas/inicio/inicio.component';
+import { ConfiguracionMenuComponent } from './vistas/configuracion-menu/configuracion-menu.component';
+import { ConfiguracionUsuarioComponent } from './vistas/configuracion-usuario/configuracion-usuario.component';
+import { ConfiguracionAreasComponent } from './vistas/configuracion-areas/configuracion-areas.component';
+import { InventarioMenuComponent } from './vistas/inventario-menu/inventario-menu.component';
+import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
+import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,6 +16,9 @@ const routes: Routes = [
   { path: 'configuracion', component: ConfiguracionMenuComponent },
   { path: 'configuracionUsuarios', component: ConfiguracionUsuarioComponent },
   { path: 'configuracionAreas', component: ConfiguracionAreasComponent },
+  { path: 'inventario', component: InventarioMenuComponent },
+  { path: 'items', component: InventarioArticuloComponent },
+  { path: 'inventario-detalle/:id', component: InventarioDetalleComponent },
 
 ];
 

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '../services/user.service'; 
-import { Usuario } from '../dominio/usuario';
+
 import { MatTableDataSource } from '@angular/material/table';
-import { EditarUsuarioDialogComponent } from '../editar-usuario-dialog/editar-usuario-dialog.component';
+import { EditarUsuarioDialogComponent } from '../dialog-usuario/editar-usuario-dialog.component';
+import { Usuario } from 'src/app/dominio/usuario';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-configuracion-usuario',

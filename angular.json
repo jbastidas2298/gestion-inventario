@@ -89,6 +89,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "allowedHosts": ["all"],
             "browserTarget": "gestion-inventario:build"
           },
           "configurations": {

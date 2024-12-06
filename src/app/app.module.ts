@@ -9,28 +9,33 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './vistas/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { LeyendaComponent } from './leyenda/leyenda.component';
+import { LeyendaComponent } from './vistas/leyenda/leyenda.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ErrorInterceptor } from './services/errorInterceptor.service';
 import { CommonModule } from '@angular/common';
-import { InicioComponent } from './inicio/inicio.component';
+import { InicioComponent } from './vistas/inicio/inicio.component';
 import { MatIconModule } from '@angular/material/icon';
-import { BarraComponent } from './barra/barra.component';
+import { BarraComponent } from './vistas/barra/barra.component';
 import { AuthInterceptor } from './services/authInterceptor.service';
-import { ConfiguracionMenuComponent } from './configuracion-menu/configuracion-menu.component';
-import { EditarUsuarioDialogComponent } from './editar-usuario-dialog/editar-usuario-dialog.component';
-import { ConfiguracionUsuarioComponent } from './configuracion-usuario/configuracion-usuario.component';
+import { ConfiguracionMenuComponent } from './vistas/configuracion-menu/configuracion-menu.component';
+import { EditarUsuarioDialogComponent } from './vistas/dialog-usuario/editar-usuario-dialog.component';
+import { ConfiguracionUsuarioComponent } from './vistas/configuracion-usuario/configuracion-usuario.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ConfiguracionAreasComponent } from './configuracion-areas/configuracion-areas.component';
-import { AreaDialogComponent } from './area-dialog/area-dialog.component';
+import { ConfiguracionAreasComponent } from './vistas/configuracion-areas/configuracion-areas.component';
+import { AreaDialogComponent } from './vistas/dialog-area/area-dialog.component';
+import { InventarioMenuComponent } from './vistas/inventario-menu/inventario-menu.component';
+import { DialogArticuloComponent } from './vistas/dialog-articulo/dialog-articulo.component';
+import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
+import { DialogImagenComponent } from './vistas/dialog-imagen/dialog-imagen.component';
+import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
 
 @NgModule({
   declarations: [								
@@ -43,7 +48,12 @@ import { AreaDialogComponent } from './area-dialog/area-dialog.component';
     ConfiguracionUsuarioComponent,
     EditarUsuarioDialogComponent,
     ConfiguracionAreasComponent,
-    AreaDialogComponent
+    AreaDialogComponent,
+    InventarioMenuComponent,
+    DialogArticuloComponent,
+    InventarioArticuloComponent,
+    DialogImagenComponent,
+    InventarioDetalleComponent
    ],
   imports: [
     BrowserModule,

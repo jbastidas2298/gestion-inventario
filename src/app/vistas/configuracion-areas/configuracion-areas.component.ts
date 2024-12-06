@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AreaService } from '../services/area.service';
-import { Area } from '../dominio/area';
-import { AreaDialogComponent } from '../area-dialog/area-dialog.component';
-import { Usuario } from '../dominio/usuario';
-import { UserService } from '../services/user.service';
+
+import { AreaDialogComponent } from '../dialog-area/area-dialog.component';
+import { Area } from 'src/app/dominio/area';
+import { Usuario } from 'src/app/dominio/usuario';
+import { AreaService } from 'src/app/services/area.service';
+import { UserService } from 'src/app/services/user.service';
+
 
 @Component({
   selector: 'app-configuracion-areas',
