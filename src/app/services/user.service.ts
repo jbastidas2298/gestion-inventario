@@ -52,4 +52,8 @@ export class UserService {
   eliminarUsuario(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  obtenerUsuariosAreas() {
+    return this.http.get(`${this.apiUrl}/usuarioArea`);
+  }
 }

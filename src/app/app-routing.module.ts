@@ -8,6 +8,7 @@ import { ConfiguracionAreasComponent } from './vistas/configuracion-areas/config
 import { InventarioMenuComponent } from './vistas/inventario-menu/inventario-menu.component';
 import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
+import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'inventario', component: InventarioMenuComponent },
   { path: 'items', component: InventarioArticuloComponent },
   { path: 'inventario-detalle/:id', component: InventarioDetalleComponent },
+  { path: 'inventario-asignacion', component: InventarioAsignacionComponent}
 
 ];
 

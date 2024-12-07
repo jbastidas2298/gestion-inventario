@@ -1,8 +1,30 @@
 <h2 mat-dialog-title>Subir Imagen</h2>
 <div mat-dialog-content>
-  <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    class="file-input"
+  />
+
+  <div class="camera-container" *ngIf="mostrarCamara">
+    <video #video autoplay></video>
+    <canvas #canvas></canvas>
+    <button mat-raised-button color="primary" (click)="capturarFoto()">Capturar</button>
+    <button mat-button color="warn" (click)="cerrarCamara()">Cerrar Cámara</button>
+  </div>
+
+  <button mat-button color="accent" (click)="abrirCamara()">Usar Cámara</button>
 </div>
+
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="onUpload()" [disabled]="!selectedFile">Subir</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onUpload()"
+    [disabled]="!selectedFile && !capturedImage"
+  >
+    Subir
+  </button>
 </div>

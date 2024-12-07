@@ -8,6 +8,7 @@
     font-family: 'Roboto', Arial, sans-serif;
 }
 
+
 .inicio-container {
     display: flex;
     flex-direction: column;
@@ -46,14 +47,16 @@
     margin-bottom: 10px;
     color: #30b86b;
 }
+
 .detalle-section ul li {
-  margin-bottom: 8px; 
+    margin-bottom: 8px;
 }
+
 .qr-code {
-    width: 200px; 
-    height: 200px; 
+    width: 200px;
+    height: 200px;
     object-fit: contain;
-  }
+}
 
 .detalle-section ul {
     list-style: none;
@@ -73,3 +76,10 @@
 .detalle-section strong {
     font-weight: bold;
 }
+
+.button-container.column {
+    display: flex;
+    flex-direction: column; 
+    gap: 1px; 
+  }
+  

@@ -1,0 +1,70 @@
+<div class="inicio-container">
+  <div class="barra-container custom-toolbar">
+    <span class="toolbar-title">Asignacion de Articulos</span>
+  </div>
+
+  <div class="areas-container">
+    <div class="toolbar-container">
+      <div class="toolbar-left">
+        <button mat-raised-button class="button-generar" (click)="asignacionVarios()">
+          <mat-icon>assignment</mat-icon>
+          Asignar Seleccionados
+        </button>
+      </div>
+      <div class="toolbar-left">
+        <button mat-raised-button class="button-generar" (click)="reasignarAsignacionTodos()">
+          <mat-icon>assignment</mat-icon>
+          Reasignar Usuario
+        </button>
+      </div>
+      <div class="toolbar-right">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filtrar Asignaciones</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar" />
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <table mat-table [dataSource]="filteredAsignacion" class="areas-table">
+      <ng-container matColumnDef="seleccionar">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="toggleAllRows($event)" [checked]="isAllSelected()" [indeterminate]="isSomeSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let articulosAsignacion">
+          <mat-checkbox (change)="toggleRowSelection(articulosAsignacion)" [checked]="isRowSelected(articulosAsignacion)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="codigoInterno">
+        <th mat-header-cell *matHeaderCellDef> Cod. Interno</th>
+        <td mat-cell *matCellDef="let articuloAsignacion"> {{ articuloAsignacion.codigoInterno }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="codigoOrigen">
+        <th mat-header-cell *matHeaderCellDef> Cod. Origen </th>
+        <td mat-cell *matCellDef="let articuloAsignacion"> {{ articuloAsignacion.codigoOrigen }} </td>
+      </ng-container>
+      <ng-container matColumnDef="nombreAsignado">
+        <th mat-header-cell *matHeaderCellDef> Usuario/Area </th>
+        <td mat-cell *matCellDef="let articuloAsignacion"> {{ articuloAsignacion.nombreAsignado }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let articuloAsignacion">
+          <button mat-icon-button color="primary" (click)="editarAsignacion(articuloAsignacion)">
+            <mat-icon>assignment</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="generarReporteActaEntrega(articuloAsignacion)">
+            <mat-icon>download</mat-icon>
+            Acta
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

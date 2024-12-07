@@ -36,6 +36,9 @@ import { DialogArticuloComponent } from './vistas/dialog-articulo/dialog-articul
 import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
 import { DialogImagenComponent } from './vistas/dialog-imagen/dialog-imagen.component';
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
+import { AsignacionDialogComponent } from './vistas/dialog-asignacion/asignacion-dialog.component';
 
 @NgModule({
   declarations: [								
@@ -53,7 +56,9 @@ import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventar
     DialogArticuloComponent,
     InventarioArticuloComponent,
     DialogImagenComponent,
-    InventarioDetalleComponent
+    InventarioDetalleComponent,
+    InventarioAsignacionComponent,
+    AsignacionDialogComponent
    ],
   imports: [
     BrowserModule,
@@ -75,8 +80,8 @@ import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventar
     MatTableModule,
     MatDialogModule,
     MatSelectModule,
-    MatCheckboxModule
-
+    MatCheckboxModule,
+    ZXingScannerModule
   ],
   providers: [
     {

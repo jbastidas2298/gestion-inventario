@@ -3,7 +3,10 @@
     <span class="toolbar-title">Gestión de Áreas</span>
   </div>
   <div class="areas-container">
-    <button mat-raised-button class="custom-green-button" (click)="agregarArea()">Agregar Área</button>
+    <button mat-raised-button class="button-agregar" (click)="agregarArea()">
+      <mat-icon>add</mat-icon>
+      Agregar Área
+    </button>
 
     <table mat-table [dataSource]="areas" class="areas-table">
       <ng-container matColumnDef="nombre">

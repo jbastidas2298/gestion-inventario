@@ -1,0 +1,47 @@
+<h1 mat-dialog-title>
+  {{ articuloSeleccionado ? 'Editar Asignación' : 'Reasignar Artículos' }}
+</h1>
+
+<div mat-dialog-content>
+  <!-- Campo para el artículo (solo si es una edición de asignación) -->
+  <div *ngIf="articuloSeleccionado">
+    <mat-form-field appearance="fill">
+      <mat-label>Artículo</mat-label>
+      <input matInput [value]="articuloSeleccionado.codigoInterno + ' - ' + articuloSeleccionado.codigoOrigen" readonly />
+    </mat-form-field>
+  </div>
+
+  <!-- Selector del usuario actual (solo para reasignación) -->
+  <div *ngIf="isReassigning">
+    <mat-form-field appearance="fill">
+      <mat-label>Usuario Actual</mat-label>
+      <mat-select [(ngModel)]="usuarioActual">
+        <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario">
+          {{ usuario.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="fill">
+    <mat-label>{{ isReassigning ? 'Nuevo Usuario/Área' : 'Asignar Usuario' }}</mat-label>
+    <mat-select [(ngModel)]="usuarioSeleccionado">
+      <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario">
+        {{ usuario.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Campo para el motivo (solo para reasignación) -->
+  <div *ngIf="isReassigning">
+    <mat-form-field appearance="fill">
+      <mat-label>Motivo</mat-label>
+      <textarea matInput [(ngModel)]="motivo"></textarea>
+    </mat-form-field>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
+</div>
