@@ -5,6 +5,7 @@ import { DialogPdfComponent } from '../dialog-pdf/dialog-pdf.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/Notification.service';
 import { UserService } from 'src/app/services/user.service';
+import { ArchivoService } from 'src/app/services/archivo.service';
 
 @Component({
   selector: 'app-inventario-detalle',
@@ -22,7 +23,8 @@ export class InventarioDetalleComponent implements OnInit {
     private itemsService: ItemsService,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    private archivoService : ArchivoService
   ) {}
 
   ngOnInit() {
@@ -38,7 +40,7 @@ export class InventarioDetalleComponent implements OnInit {
   }
 
   cargarCodigoQR(id: number) {
-    this.itemsService.generarCodigoQR(id).subscribe((data) => {
+    this.archivoService.generarCodigoQR(id).subscribe((data) => {
       const reader = new FileReader();
       reader.onload = () => {
         this.qrCodeUrl = reader.result as string;
@@ -48,7 +50,7 @@ export class InventarioDetalleComponent implements OnInit {
   }
   
   Revisar(path: string): void {
-    this.itemsService.verArchivo(path)
+    this.archivoService.verArchivo(path)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
@@ -58,7 +60,7 @@ export class InventarioDetalleComponent implements OnInit {
   }
 
   Descargar(path: string): void {
-    this.itemsService.descargarArchivo(path).subscribe({
+    this.archivoService.descargarArchivo(path).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a'); 
@@ -80,7 +82,7 @@ export class InventarioDetalleComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((file: File) => {
       if (file) {
-        this.itemsService.subirPdf(this.id, file).subscribe({
+        this.archivoService.subirPdf(this.id, file).subscribe({
           next: (response) => {
             this.notificationService.showSuccess('Archivo subido exitosamente');
             this.cargarArticuloDetalle(this.id);
@@ -92,7 +94,7 @@ export class InventarioDetalleComponent implements OnInit {
   }
 
   generarReporte(): void {
-    this.itemsService.generarReporteItems(this.id).subscribe({
+    this.archivoService.generarReporteItems(this.id).subscribe({
       next: (pdfBlob) => {
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');

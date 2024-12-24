@@ -11,15 +11,12 @@ export class DialogArticuloComponent implements OnInit {
   articuloForm: FormGroup;
   isCodigoOrigenReadonly: boolean = false;
   mostrarEscaner: boolean = false;
-  selectedDevice: MediaDeviceInfo | undefined;
+  selectedDevice: MediaDeviceInfo | null = null;
   availableDevices: MediaDeviceInfo[] = [];
   estados: string[] = [
-    'PERDIDO_ASIGNADO',
     'DISPONIBLE',
-    'DAÑADO_ASIGNADO',
-    'DAÑADO',
-    'PERDIDO',
-    'ASIGNADO',
+    'REVISION_TECNICA',
+    'DADO_BAJA'
   ];
   constructor(
     private fb: FormBuilder,
@@ -35,6 +32,7 @@ export class DialogArticuloComponent implements OnInit {
       marca: [data?.marca || '', Validators.required],
       estado: [data?.estado || '', Validators.required],
       observacion: [data?.observacion || ''],
+      asignarseArticulo: [true],
     });
   }
 
@@ -44,12 +42,16 @@ export class DialogArticuloComponent implements OnInit {
     }
   }
 
-  activarEscaner() {
+  activarEscaner(): void {
+    if (this.mostrarEscaner) {
+      this.desactivarEscaner();
+    }
     this.mostrarEscaner = true;
   }
-
-  desactivarEscaner() {
+  
+  desactivarEscaner(): void {
     this.mostrarEscaner = false;
+    this.selectedDevice = null;
   }
 
   onCodigoEscaneado(result: string) {
@@ -59,9 +61,11 @@ export class DialogArticuloComponent implements OnInit {
     this.desactivarEscaner();
   }
 
-  onCamerasFound(devices: MediaDeviceInfo[]) {
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
-    this.selectedDevice = devices[0];
+    if (!this.selectedDevice && devices.length > 0) {
+      this.selectedDevice = devices[0]; 
+    }
   }
 
   onScanError(error: any) {

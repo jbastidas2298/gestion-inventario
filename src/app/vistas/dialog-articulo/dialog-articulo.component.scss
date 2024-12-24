@@ -1,18 +1,16 @@
 .form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
 
-  
-  mat-dialog-content {
-    max-height: 500px;
-    overflow: auto;
-  }
-  
-  mat-dialog-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-  
+.field-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}

@@ -6,6 +6,7 @@ import { DialogImagenComponent } from '../dialog-imagen/dialog-imagen.component'
 import { NotificationService } from 'src/app/services/Notification.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { ArchivoService } from 'src/app/services/archivo.service';
 
 @Component({
   selector: 'app-inventario-articulo',
@@ -24,7 +25,8 @@ export class InventarioArticuloComponent implements OnInit {
     private itemsService: ItemsService,
     private notificationService: NotificationService,
     private router: Router,
-    private userService : UserService
+    private userService : UserService,
+    private archivoService : ArchivoService
   ) { }
 
   ngOnInit() {
@@ -82,7 +84,7 @@ export class InventarioArticuloComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((file: File) => {
       if (file) {
-        this.itemsService.subirImagen(id, file).subscribe({
+        this.archivoService.subirImagen(id, file).subscribe({
           next: (response) => {
             this.notificationService.showSuccess('Imagen subida exitosamente');
             this.cargarArticulos();
@@ -128,7 +130,7 @@ export class InventarioArticuloComponent implements OnInit {
       return;
     }
 
-    this.itemsService.generarReporteCodigosBarra(selectedIds).subscribe({
+    this.archivoService.generarReporteCodigosBarra(selectedIds).subscribe({
       next: (pdfBlob) => {
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');

@@ -4,6 +4,7 @@ import { ItemsService } from 'src/app/services/items.service';
 import { UserService } from 'src/app/services/user.service';
 import { AsignacionDialogComponent } from '../dialog-asignacion/asignacion-dialog.component';
 import { NotificationService } from 'src/app/services/Notification.service';
+import { ArchivoService } from 'src/app/services/archivo.service';
 
 @Component({
   selector: 'app-inventario-asignacion',
@@ -21,7 +22,8 @@ export class InventarioAsignacionComponent implements OnInit {
     private userService: UserService,
     private dialog: MatDialog,
     private itemsService : ItemsService,
-    private notificacion : NotificationService
+    private notificacion : NotificationService,
+    private archivoService : ArchivoService
   ) {}
 
   ngOnInit() {
@@ -128,7 +130,7 @@ export class InventarioAsignacionComponent implements OnInit {
   }
 
   generarReporteActaEntrega(articuloAsignacion: any): void {
-    this.itemsService.generarReporteActaEntrega(articuloAsignacion.idArticulo).subscribe({
+    this.archivoService.generarReporteActaEntrega(articuloAsignacion.idArticulo).subscribe({
       next: (pdfBlob) => {
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
