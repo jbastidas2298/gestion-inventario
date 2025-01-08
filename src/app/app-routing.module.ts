@@ -10,22 +10,23 @@ import { InventarioArticuloComponent } from './vistas/inventario-articulo/invent
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
 import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
 
-const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'inicio', component: InicioComponent },
-  { path: 'configuracion', component: ConfiguracionMenuComponent },
-  { path: 'configuracionUsuarios', component: ConfiguracionUsuarioComponent },
-  { path: 'configuracionAreas', component: ConfiguracionAreasComponent },
-  { path: 'inventario', component: InventarioMenuComponent },
-  { path: 'items', component: InventarioArticuloComponent },
-  { path: 'inventario-detalle/:id', component: InventarioDetalleComponent },
-  { path: 'inventario-asignacion', component: InventarioAsignacionComponent}
-
-];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot([
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'login', component: LoginComponent },
+    { path: 'inicio', component: InicioComponent },
+    { path: 'configuracion', component: ConfiguracionMenuComponent },
+    { path: 'configuracionUsuarios', component: ConfiguracionUsuarioComponent },
+    { path: 'configuracionAreas', component: ConfiguracionAreasComponent },
+    { path: 'inventario', component: InventarioMenuComponent },
+    { path: 'items', component: InventarioArticuloComponent },
+    { path: 'inventario-detalle/:id', component: InventarioDetalleComponent },
+    { path: 'inventario-asignacion', component: InventarioAsignacionComponent },
+  
+  ], {scrollPositionRestoration: 'enabled'})
+],
+exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

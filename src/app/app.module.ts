@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,16 +12,14 @@ import { LoginComponent } from './vistas/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { LeyendaComponent } from './vistas/leyenda/leyenda.component';
+import { LeyendaComponent } from './general/leyenda/leyenda.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { ErrorInterceptor } from './services/errorInterceptor.service';
 import { CommonModule } from '@angular/common';
 import { InicioComponent } from './vistas/inicio/inicio.component';
 import { MatIconModule } from '@angular/material/icon';
-import { BarraComponent } from './vistas/barra/barra.component';
-import { AuthInterceptor } from './services/authInterceptor.service';
+import { BarraComponent } from './general/barra/barra.component';
 import { ConfiguracionMenuComponent } from './vistas/configuracion-menu/configuracion-menu.component';
 import { EditarUsuarioDialogComponent } from './vistas/dialog-usuario/editar-usuario-dialog.component';
 import { ConfiguracionUsuarioComponent } from './vistas/configuracion-usuario/configuracion-usuario.component';
@@ -36,12 +33,15 @@ import { DialogArticuloComponent } from './vistas/dialog-articulo/dialog-articul
 import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
 import { DialogImagenComponent } from './vistas/dialog-imagen/dialog-imagen.component';
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
 import { AsignacionDialogComponent } from './vistas/dialog-asignacion/asignacion-dialog.component';
+import { Interceptor } from './services/interceptor.service';
+import { LoadingComponent } from './general/loading/loading.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @NgModule({
-  declarations: [								
+  declarations: [
     AppComponent,
     LoginComponent,
     LeyendaComponent,
@@ -58,8 +58,9 @@ import { AsignacionDialogComponent } from './vistas/dialog-asignacion/asignacion
     DialogImagenComponent,
     InventarioDetalleComponent,
     InventarioAsignacionComponent,
-    AsignacionDialogComponent
-   ],
+    AsignacionDialogComponent,
+    LoadingComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -81,21 +82,17 @@ import { AsignacionDialogComponent } from './vistas/dialog-asignacion/asignacion
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    ZXingScannerModule
+    //ZXingScannerModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor, 
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor, 
+      useClass: Interceptor,
       multi: true
     }
   ],
-  
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

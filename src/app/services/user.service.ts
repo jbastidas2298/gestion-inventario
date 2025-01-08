@@ -56,4 +56,11 @@ export class UserService {
   obtenerUsuariosAreas() {
     return this.http.get(`${this.apiUrl}/usuarioArea`);
   }
+
+  importarExcel(file: File) {
+    const formData = new FormData();
+    formData.append('file', file); 
+    return this.http.post<string>(`${this.apiUrl}/importar-excel`, formData);
+  }
+  
 }

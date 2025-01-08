@@ -4,8 +4,8 @@
     <div class="field-row">
       <mat-form-field appearance="fill">
         <mat-label>Código Origen</mat-label>
-        <input matInput formControlName="codigoOrigen" [readonly]="isCodigoOrigenReadonly"
-          [placeholder]="isCodigoOrigenReadonly ? 'Escaneado' : 'Ingrese el código'" />
+        <input matInput formControlName="codigoOrigen" [readonly]="mostrarEscaner"
+          placeholder="Escanea o ingresa el código" />
       </mat-form-field>
       <button mat-stroked-button color="primary" *ngIf="!data?.id" (click)="activarEscaner()">
         <mat-icon>qr_code_scanner</mat-icon>
@@ -14,10 +14,7 @@
     </div>
 
     <div *ngIf="mostrarEscaner" class="scanner-container">
-      <zxing-scanner [formats]="['QR_CODE', 'CODE_128', 'EAN_13']" [device]="selectedDevice"
-        (scanSuccess)="onCodigoEscaneado($event)" (camerasFound)="onCamerasFound($event)"
-        (scanError)="onScanError($event)">
-      </zxing-scanner>
+      <video #video autoplay></video>
       <button mat-stroked-button color="warn" (click)="desactivarEscaner()">Cerrar Escáner</button>
     </div>
 

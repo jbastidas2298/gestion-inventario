@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./configuracion-usuario.component.scss']
 })
 export class ConfiguracionUsuarioComponent implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
   usuarios: Usuario[] = [];
   dataSource: MatTableDataSource<Usuario> = new MatTableDataSource<Usuario>();
 
@@ -81,5 +82,18 @@ export class ConfiguracionUsuarioComponent implements OnInit {
   
   aplicarFiltro(): void {
     this.dataSource.filter = this.filtro.trim().toLowerCase();
+  }
+
+  triggerFileInput() {
+    this.fileInput.nativeElement.click(); 
+  }
+
+  importarExcel(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.userService.importarExcel(file).subscribe({
+        next: () => this.cargarUsuarios(),
+      });
+    }
   }
 }

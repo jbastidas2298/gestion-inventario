@@ -1,21 +1,21 @@
-.inicio-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 20px;
-  background: linear-gradient(-135deg, #30B86B 50%, #f1f1f1 50%);
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-
-
 .usuarios-container {
   width: 100%;
   max-width: 800px;
   margin-top: 20px;
 }
 
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+
+.excel-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
 .usuarios-table {
   width: 100%;
   margin-top: 20px;

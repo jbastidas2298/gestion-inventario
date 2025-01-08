@@ -3,9 +3,18 @@
     <span class="toolbar-title">Gestión de Usuarios</span>
   </div>
   <div class="usuarios-container">
-    <button mat-raised-button class="button-agregar" (click)="agregarUsuario()">
-      <mat-icon>add</mat-icon>
-      Agregar Usuario</button>
+    <div class="button-container">
+      <button mat-raised-button class="button-agregar" (click)="agregarUsuario()">
+        <mat-icon>add</mat-icon>
+        Agregar Usuario
+      </button>
+
+      <button mat-raised-button class="button-importar" (click)="triggerFileInput()">
+        <img src="assets/excel.png" alt="Excel" class="excel-icon" />
+        Importar
+      </button>
+      <input type="file" accept=".xlsx, .xls" #fileInput (change)="importarExcel($event)" style="display: none;" />
+    </div>
     <input type="text" [(ngModel)]="filtro" (keyup)="aplicarFiltro()" placeholder="Filtrar por nombre completo" />
 
     <table mat-table [dataSource]="dataSource" class="usuarios-table">

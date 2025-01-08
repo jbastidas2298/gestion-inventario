@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
 
 @Component({
   selector: 'app-dialog-articulo',
@@ -8,9 +9,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./dialog-articulo.component.scss'],
 })
 export class DialogArticuloComponent implements OnInit {
+  @ViewChild('video', { static: false }) videoElement!: ElementRef;
   articuloForm: FormGroup;
   isCodigoOrigenReadonly: boolean = false;
   mostrarEscaner: boolean = false;
+  scannerActive: boolean = false;
   selectedDevice: MediaDeviceInfo | null = null;
   availableDevices: MediaDeviceInfo[] = [];
   estados: string[] = [
@@ -18,11 +21,17 @@ export class DialogArticuloComponent implements OnInit {
     'REVISION_TECNICA',
     'DADO_BAJA'
   ];
+  private codeReader: BrowserMultiFormatReader; // Correcto
+
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogArticuloComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    // Inicialización de codeReader
+    this.codeReader = new BrowserMultiFormatReader();
+
+    // Configuración del formulario
     this.articuloForm = this.fb.group({
       id: [data?.id || null],
       codigoOrigen: [data?.codigoOrigen || '', Validators.required],
@@ -43,41 +52,47 @@ export class DialogArticuloComponent implements OnInit {
   }
 
   activarEscaner(): void {
-    if (this.mostrarEscaner) {
-      this.desactivarEscaner();
+    if (this.scannerActive) {
+      return; 
     }
+  
     this.mostrarEscaner = true;
+    this.scannerActive = true;
+  
+    setTimeout(() => {
+      if (this.videoElement && this.videoElement.nativeElement) {
+        this.codeReader.decodeFromVideoDevice(
+          null,
+          this.videoElement.nativeElement,
+          (result, err) => {
+            if (result) {
+              this.articuloForm.controls['codigoOrigen'].setValue(result.getText());
+              this.desactivarEscaner();
+            }
+          }
+        );
+      }
+    }, 100);
   }
   
+
   desactivarEscaner(): void {
-    this.mostrarEscaner = false;
-    this.selectedDevice = null;
-  }
-
-  onCodigoEscaneado(result: string) {
-    console.log('Código escaneado:', result);
-    this.articuloForm.controls['codigoOrigen'].setValue(result);
-    this.isCodigoOrigenReadonly = true;
-    this.desactivarEscaner();
-  }
-
-  onCamerasFound(devices: MediaDeviceInfo[]): void {
-    this.availableDevices = devices;
-    if (!this.selectedDevice && devices.length > 0) {
-      this.selectedDevice = devices[0]; 
+    if (this.scannerActive) {
+      this.codeReader.reset();
+      this.scannerActive = false;
+      this.mostrarEscaner = false;
     }
   }
 
-  onScanError(error: any) {
-  }
 
   onSave() {
     if (this.articuloForm.valid) {
       this.dialogRef.close(this.articuloForm.value);
     }
   }
-  
+
   onCancel() {
     this.dialogRef.close();
+    this.desactivarEscaner();
   }
 }
