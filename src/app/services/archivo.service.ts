@@ -71,5 +71,11 @@ export class ArchivoService {
       responseType: 'blob', 
     });
   }
+
+  importarExcel(file: File) {
+    const formData = new FormData();
+    formData.append('file', file); 
+    return this.http.post<string>(`${this.apiUrl}/importar-excel`, formData);
+  }
   
 }

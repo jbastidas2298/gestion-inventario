@@ -21,6 +21,11 @@ export class DialogArticuloComponent implements OnInit {
     'REVISION_TECNICA',
     'DADO_BAJA'
   ];
+
+  grupoActivo: string[] = [
+    'BIENES_SUJETOS_A_CONTROL',
+    'EQUIPO_ELECTRONICO'
+  ];
   private codeReader: BrowserMultiFormatReader; // Correcto
 
   constructor(
@@ -28,18 +33,21 @@ export class DialogArticuloComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogArticuloComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    // Inicialización de codeReader
     this.codeReader = new BrowserMultiFormatReader();
 
-    // Configuración del formulario
     this.articuloForm = this.fb.group({
       id: [data?.id || null],
       codigoOrigen: [data?.codigoOrigen || '', Validators.required],
       codigoInterno: [data?.codigoInterno || ''],
       nombre: [data?.nombre || '', Validators.required],
-      descripcion: [data?.descripcion || '', Validators.required],
+      modelo: [data?.modelo || '', Validators.required],
+      serie: [data?.serie || '', Validators.required],
       marca: [data?.marca || '', Validators.required],
+      seccion: [data?.seccion || '', Validators.required],
+      ubicacion: [data?.ubicacion || '', Validators.required],
       estado: [data?.estado || '', Validators.required],
+      grupoActivo: [data?.grupoActivo || '', Validators.required],
+      descripcion: [data?.descripcion || '', Validators.required],
       observacion: [data?.observacion || ''],
       asignarseArticulo: [true],
     });

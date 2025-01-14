@@ -38,6 +38,7 @@ import { AsignacionDialogComponent } from './vistas/dialog-asignacion/asignacion
 import { Interceptor } from './services/interceptor.service';
 import { LoadingComponent } from './general/loading/loading.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -83,7 +84,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSelectModule,
     MatCheckboxModule,
     //ZXingScannerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatPaginatorModule
   ],
   providers: [
     {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsService } from 'src/app/services/items.service';
 import { DialogArticuloComponent } from '../dialog-articulo/dialog-articulo.component';
@@ -7,6 +7,7 @@ import { NotificationService } from 'src/app/services/Notification.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-inventario-articulo',
@@ -14,11 +15,15 @@ import { ArchivoService } from 'src/app/services/archivo.service';
   styleUrls: ['./inventario-articulo.component.scss']
 })
 export class InventarioArticuloComponent implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
   articulos: any[] = [];
   filteredArticulos: any[] = [];
   displayedColumns: string[] = ['seleccionar','revisar','codigoOrigen', 'codigoInterno', 'nombre', 'acciones'];
   selectedRows: Set<number> = new Set(); 
   filtro: string = '';
+  totalElements = 0; 
+  pageSize = 10;
+  pageIndex = 0;
 
   constructor(
     private dialog: MatDialog,
@@ -33,19 +38,26 @@ export class InventarioArticuloComponent implements OnInit {
     this.cargarArticulos();
   }
 
-  cargarArticulos() {
-    this.itemsService.obtenerItems().subscribe((data: any) => {
-      this.articulos = data;
+  cargarArticulos(page: number = 0, size: number = 10): void {
+    this.itemsService.obtenerItems(page, size, this.filtro).subscribe((data: any) => {
+      this.articulos = data.content || [];
       this.filteredArticulos = [...this.articulos];
+      this.totalElements = data.totalElements || 0;
+      this.pageSize = data.size || 10;
+      this.pageIndex = data.number || 0;
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filteredArticulos = this.articulos.filter((articulo) =>
-      articulo.nombre.toLowerCase().includes(filterValue) ||
-      articulo.codigoOrigen.toLowerCase().includes(filterValue)
-    );
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim();
+    this.filtro = filterValue;
+    this.cargarArticulos(this.pageIndex, this.pageSize);
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.cargarArticulos(this.pageIndex, this.pageSize);
   }
 
   onAdd() {
@@ -144,9 +156,24 @@ export class InventarioArticuloComponent implements OnInit {
     });
   }
 
+  triggerFileInput() {
+    this.fileInput.nativeElement.click(); 
+  }
+
+  importarExcel(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.archivoService.importarExcel(file).subscribe({
+        next: () => this.cargarArticulos(),
+      });
+    }
+  }
+
   isAdmin(): boolean {
     const roles = this.userService.getRoles(); 
     return roles.includes('ADMINISTRADOR');
   }
+
+
   
 }

@@ -11,8 +11,13 @@ export class ItemsService {
 
   constructor(private http: HttpClient) {}
 
-  obtenerItems() {
-    return this.http.get(`${this.apiUrl}`);
+  obtenerItems(page: number = 0, size: number = 10, filter: string = ''): Observable<any> {
+    const params = { 
+      page: page.toString(), 
+      size: size.toString(), 
+      filter 
+    };
+    return this.http.get(`${this.apiUrl}`, { params });
   }
   
   agregarItem(item: any) {

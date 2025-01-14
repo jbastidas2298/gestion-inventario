@@ -9,6 +9,12 @@
     margin-top: 20px;
   }
   
+  .excel-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
   .toolbar-title {
     font-size: 24px;
     font-weight: bold;
@@ -35,6 +41,30 @@
   .custom-green-button:hover {
     background-color: #279a5b;
   }
+
+  .filter-container {
+    display: flex;
+    justify-content: flex-start;
+    margin: 10px 0;
+    width: 100%;
+  }
+  
+  .filter-field {
+    flex: 1;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  mat-form-field {
+    background: #f5f5f5; 
+    border-radius: 5px;
+  }
+  
+  input {
+    padding: 8px;
+    font-size: 14px;
+  }
+  
   
   @media (max-width: 480px) {
   

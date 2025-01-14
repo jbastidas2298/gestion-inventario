@@ -41,6 +41,45 @@
 
     <div class="field-row">
       <mat-form-field appearance="fill">
+        <mat-label>Serie</mat-label>
+        <input matInput formControlName="serie" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Modelo</mat-label>
+        <input matInput formControlName="modelo" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Ubicacion Edificio</mat-label>
+        <input matInput formControlName="ubicacion" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Sección</mat-label>
+        <input matInput formControlName="seccion" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Grupo Activo</mat-label>
+        <mat-select formControlName="grupoActivo">
+          <mat-option *ngFor="let grupo of grupoActivo" [value]="grupo">
+            {{ grupo }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="field-row">
+      <mat-form-field appearance="fill">
         <mat-label>Estado</mat-label>
         <mat-select formControlName="estado">
           <mat-option *ngFor="let estado of estados" [value]="estado">
@@ -49,6 +88,7 @@
         </mat-select>
       </mat-form-field>
     </div>
+
 
     <div class="field-row">
       <mat-form-field appearance="fill">

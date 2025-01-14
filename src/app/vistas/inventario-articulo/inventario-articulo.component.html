@@ -4,20 +4,29 @@
   </div>
   <div class="articulos-container">
 
-  <div *ngIf="isAdmin()" >
-    <button mat-raised-button class="button-agregar" (click)="onAdd()">
-      <mat-icon>add</mat-icon>
-      Agregar Artículo</button>
-    <button mat-raised-button class="button-generar" (click)="generarCodigosBarra()">
-      <mat-icon>qr_code_scanner</mat-icon>
-      Generar Códigos
-    </button>
-  </div>
+    <div *ngIf="isAdmin()">
+      <button mat-raised-button class="button-agregar" (click)="onAdd()">
+        <mat-icon>add</mat-icon>
+        Agregar Artículo</button>
+      <button mat-raised-button class="button-generar" (click)="generarCodigosBarra()">
+        <mat-icon>qr_code_scanner</mat-icon>
+        Generar Códigos
+      </button>
+      <button mat-raised-button class="button-importar" (click)="triggerFileInput()">
+        <img src="assets/excel.png" alt="Excel" class="excel-icon" />
+        Importar
+      </button>
+      <input type="file" accept=".xlsx, .xls" #fileInput (change)="importarExcel($event)" style="display: none;" />
+    </div>
+
+    <div class="filter-container">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Buscar artículos</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Escribe aquí para filtrar..." />
+      </mat-form-field>
+    </div>
     
-    <mat-form-field appearance="outline">
-      <mat-label>Filtrar artículos</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar artículos" />
-    </mat-form-field>
     <table mat-table [dataSource]="filteredArticulos" class="articulos-table">
       <ng-container matColumnDef="seleccionar">
         <th mat-header-cell *matHeaderCellDef>
@@ -70,5 +79,8 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator [length]="totalElements" [pageSize]="pageSize" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons (page)="onPageChange($event)">
+    </mat-paginator>
   </div>
 </div>
