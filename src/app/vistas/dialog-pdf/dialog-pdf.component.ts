@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/Notification.service';
 
@@ -13,12 +13,12 @@ export class DialogPdfComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogPdfComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public notificacion : NotificationService
+    public notificacion: NotificationService
   ) {}
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-  
+  seleccionarArchivo(event: any) {
+    const file = event.files[0]; // Compatible con PrimeNG's p-fileUpload
+
     if (file && file.type === 'application/pdf') {
       this.selectedFile = file;
     } else {
@@ -26,14 +26,14 @@ export class DialogPdfComponent {
       this.notificacion.showError('Solo se permiten archivos PDF.');
     }
   }
-  
-  onUpload() {
+
+  subirArchivo() {
     if (this.selectedFile) {
       this.dialogRef.close(this.selectedFile);
     }
   }
 
-  onCancel() {
+  cancelar() {
     this.dialogRef.close();
   }
 }

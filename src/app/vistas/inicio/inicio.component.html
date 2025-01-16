@@ -13,3 +13,25 @@
   </div>
 </div>
 <router-outlet></router-outlet>
+<div style="position: fixed; bottom: 16px; right: 16px;">
+  <button
+    mat-fab
+    color="primary"
+    (click)="mostrarLeyenda()"
+    aria-label="Mostrar Leyenda"
+  >
+    <mat-icon>help_outline</mat-icon>
+  </button>
+</div>
+<ng-template #leyendaDialog>
+  <h2 mat-dialog-title>Contacto y Soporte Técnico</h2>
+  <mat-dialog-content>
+    <p>
+      <strong>Correo:</strong> ale_bas98&#64;hotmail.com <br />
+      <strong>Teléfono:</strong> 099 003 8074
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+  </mat-dialog-actions>
+</ng-template>

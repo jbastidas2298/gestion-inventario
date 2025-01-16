@@ -50,6 +50,15 @@
       margin-bottom: 10px;
     }
   }
+  button[mat-fab] {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+  }
+  
+  .custom-dialog-container {
+    border-radius: 16px;
+    padding: 16px;
+  }
   
   @media (max-width: 600px) {
     .dashboard-grid {

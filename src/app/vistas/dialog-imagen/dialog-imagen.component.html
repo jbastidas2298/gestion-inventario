@@ -1,30 +1,25 @@
 <h2 mat-dialog-title>Subir Imagen</h2>
-<div mat-dialog-content>
-  <input
-    type="file"
-    (change)="onFileSelected($event)"
-    accept="image/*"
-    class="file-input"
-  />
 
-  <div class="camera-container" *ngIf="mostrarCamara">
-    <video #video autoplay></video>
-    <canvas #canvas></canvas>
-    <button mat-raised-button color="primary" (click)="capturarFoto()">Capturar</button>
-    <button mat-button color="warn" (click)="cerrarCamara()">Cerrar Cámara</button>
+<div mat-dialog-content>
+  <p-fileUpload name="file" accept="image/*" mode="basic" (onSelect)="seleccionarArchivo($event)"
+    chooseLabel="Seleccionar Archivo"></p-fileUpload>
+
+  <div *ngIf="mostrarCamara" style="margin-top: 16px; display: flex; flex-direction: column; align-items: center;">
+    <video #video autoplay style="width: 100%; max-width: 480px; border: 1px solid #ccc; border-radius: 8px;"></video>
+    <canvas #canvas style="display: none;"></canvas>
+    <div style="margin-top: 16px; display: flex; gap: 8px;">
+      <button mat-raised-button color="primary" (click)="capturarFoto()">Capturar</button>
+      <button mat-button color="warn" (click)="cerrarCamara()">Cerrar Cámara</button>
+    </div>
   </div>
 
-  <button mat-button color="accent" (click)="abrirCamara()">Usar Cámara</button>
+  <button mat-raised-button color="accent" style="margin-top: 16px;" (click)="abrirCamara()">Usar Cámara</button>
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancelar</button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onUpload()"
-    [disabled]="!selectedFile && !capturedImage"
-  >
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="subirImagen()"
+    [disabled]="!archivoSeleccionado && !imagenCapturada">
     Subir
   </button>
 </div>

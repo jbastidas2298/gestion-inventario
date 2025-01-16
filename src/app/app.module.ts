@@ -39,8 +39,16 @@ import { Interceptor } from './services/interceptor.service';
 import { LoadingComponent } from './general/loading/loading.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
-
+import { MatGridListModule } from '@angular/material/grid-list';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CardModule } from 'primeng/card';
+import { AccordionModule } from 'primeng/accordion';
+import { FileUploadModule } from 'primeng/fileupload';
+import { DialogConfirmarComponent } from './vistas/dialog-confirmar/dialog-confirmar.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +68,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     InventarioDetalleComponent,
     InventarioAsignacionComponent,
     AsignacionDialogComponent,
-    LoadingComponent
+    LoadingComponent,
+    DialogConfirmarComponent,
+    DialogPdfComponent
   ],
   imports: [
     BrowserModule,
@@ -85,7 +95,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCheckboxModule,
     //ZXingScannerModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatGridListModule,
+    TableModule,
+    ButtonModule,
+    CheckboxModule,
+    CardModule,
+    AccordionModule,
+    FileUploadModule,
+    MatDividerModule
   ],
   providers: [
     {

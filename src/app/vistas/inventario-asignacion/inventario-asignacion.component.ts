@@ -13,27 +13,34 @@ import { ArchivoService } from 'src/app/services/archivo.service';
 })
 export class InventarioAsignacionComponent implements OnInit {
   usuariosAreas: any[] = [];
-  displayedColumns: string[] = ['seleccionar','codigoOrigen','codigoInterno', 'nombreAsignado', 'acciones'];
   articulosAsignacion: any[] = [];
-  selectedRows: Set<number> = new Set(); 
+  seleccionados: Set<number> = new Set();
   filteredAsignacion: any[] = [];
+  filterValue: string = '';
+  currentPage: number = 0;
+  pageSize: number = 10;
+  totalRecords: number = 0;
 
   constructor(
     private userService: UserService,
     private dialog: MatDialog,
-    private itemsService : ItemsService,
-    private notificacion : NotificationService,
-    private archivoService : ArchivoService
-  ) {}
+    private itemsService: ItemsService,
+    private notificacion: NotificationService,
+    private archivoService: ArchivoService
+  ) { }
 
   ngOnInit() {
     this.cargarUsuariosAreas();
     this.cargarAsignaciones();
   }
-  cargarAsignaciones() {
-    this.itemsService.obtenerAsignaciones().subscribe((data: any) => {
-      this.articulosAsignacion = data;
-      this.filteredAsignacion = [...this.articulosAsignacion]
+
+  cargarAsignaciones(page: number = 0, size: number = 10, filter: string = '') {
+    this.itemsService.obtenerAsignaciones(page, size, filter).subscribe((data: any) => {
+      this.articulosAsignacion = data.content;
+      this.filteredAsignacion = [...this.articulosAsignacion];
+      this.totalRecords = data.totalElements;
+      this.pageSize = data.size;
+      this.currentPage = data.number;
     });
   }
 
@@ -51,17 +58,18 @@ export class InventarioAsignacionComponent implements OnInit {
         usuariosAreas: this.usuariosAreas,
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const idArticulo = [result.idArticulo];
         const idUsuario = result.idUsuario;
         const tipoRelacion = result.tipoRelacion;
-  
+
         this.itemsService.asignarItems(idArticulo, idUsuario, tipoRelacion).subscribe({
           next: (response) => {
-            this.notificacion.showSuccess('Asignación exitosa:');
+            this.notificacion.showSuccess('Asignación exitosa');
             this.cargarAsignaciones();
+            this.seleccionados.clear();
           },
         });
       }
@@ -72,12 +80,12 @@ export class InventarioAsignacionComponent implements OnInit {
     const dialogRef = this.dialog.open(AsignacionDialogComponent, {
       width: '400px',
       data: {
-        articuloActual: null, // No se pasa un artículo en este caso
+        articuloActual: null,
         usuariosAreas: this.usuariosAreas,
         isReassigning: true,
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const idUsuarioActual = result.idUsuarioActual;
@@ -85,7 +93,7 @@ export class InventarioAsignacionComponent implements OnInit {
         const idUsuarioNuevo = result.idUsuario;
         const tipoRelacionNuevo = result.tipoRelacion;
         const descripcion = result.descripcion;
-  
+
         this.itemsService.reasignarTodos(idUsuarioActual, tipoRelacionActual, idUsuarioNuevo, tipoRelacionNuevo, descripcion).subscribe({
           next: (response) => {
             this.notificacion.showSuccess('Reasignación realizada con éxito.');
@@ -95,33 +103,34 @@ export class InventarioAsignacionComponent implements OnInit {
       }
     });
   }
-  
+
 
   asignacionVarios() {
-    const selectedIds = Array.from(this.selectedRows);
+    const itemSeleccionados = Array.from(this.seleccionados).map((row: any) => row.idArticulo);
 
-    if (selectedIds.length === 0) {
+    if (itemSeleccionados.length === 0) {
       this.notificacion.showError('Por favor, selecciona al menos un artículo.');
       return;
     }
     const dialogRef = this.dialog.open(AsignacionDialogComponent, {
       width: '400px',
       data: {
-        articuloActual: null, 
+        articuloActual: null,
         usuariosAreas: this.usuariosAreas,
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const idUsuario = result.idUsuario;
         const tipoRelacion = result.tipoRelacion;
 
-        this.itemsService.asignarItems(selectedIds, idUsuario, tipoRelacion).subscribe({
+        this.itemsService.asignarItems(itemSeleccionados, idUsuario, tipoRelacion).subscribe({
           next: (response) => {
             this.notificacion.showSuccess('Asignaciónes exitosas');
             this.cargarAsignaciones();
-            this.selectedRows.clear();
+            const seleccionadosSet = new Set(this.seleccionados);
+            seleccionadosSet.clear(); 
           },
         });
       }
@@ -143,41 +152,20 @@ export class InventarioAsignacionComponent implements OnInit {
       },
     });
   }
-  
+
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filteredAsignacion = this.articulosAsignacion.filter((articulo) =>
-      articulo.nombreAsignado.toLowerCase().includes(filterValue) ||
-      articulo.codigoOrigen.toLowerCase().includes(filterValue)
-    );
+    this.filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.cargarAsignaciones(this.currentPage, this.pageSize, this.filterValue);
   }
-  
-  isAllSelected(): boolean {
-    return this.selectedRows.size === this.filteredAsignacion.length;
+
+
+
+  onLazyLoad(event: any) {
+    const page = event.first / event.rows;
+    const size = event.rows;
+    const filter = this.filterValue || '';
+    this.cargarAsignaciones(page, size, filter);
   }
-  
-  isSomeSelected(): boolean {
-    return this.selectedRows.size > 0 && !this.isAllSelected();
-  }
-  
-  toggleAllRows(event: any): void {
-    if (event.checked) {
-      this.filteredAsignacion.forEach((articulo: any) => this.selectedRows.add(articulo.idArticulo));
-    } else {
-      this.selectedRows.clear();
-    }
-  }
-  
-  toggleRowSelection(articulo: any): void {
-    if (this.selectedRows.has(articulo.idArticulo)) {
-      this.selectedRows.delete(articulo.idArticulo);
-    } else {
-      this.selectedRows.add(articulo.idArticulo);
-    }
-  }
-  
-  isRowSelected(articulo: any): boolean {
-    return this.selectedRows.has(articulo.idArticulo);
-  }
+
 }

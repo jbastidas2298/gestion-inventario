@@ -1,8 +1,7 @@
-<div class="page-container">
-  <app-barra *ngIf="!isLoginPage()"></app-barra>
-  <div class="main-content">
+<app-barra *ngIf="!isLoginPage()"></app-barra>
+<div style="display: flex; flex-direction: column; height: 100vh; width: 100vw; box-sizing: border-box;">
+  <div>
     <router-outlet></router-outlet>
     <app-loading></app-loading>
   </div>
-  <app-leyenda></app-leyenda>
 </div>

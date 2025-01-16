@@ -29,17 +29,21 @@ export class ItemsService {
   }
   
   eliminarItem(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
   }
 
   getArticuloDetalle(id: number) {
     return this.http.get<any>(`${this.apiUrl}/articuloDetalle/${id}`);
   }
 
-  obtenerAsignaciones() {
-    return this.http.get(`${this.apiUrl}/asignaciones`);
+  obtenerAsignaciones(page: number, size: number, filter: string): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('filter', filter);
+    
+    return this.http.get(`${this.apiUrl}/asignaciones`, { params });
   }
-
   asignarItems(idsArticulos: number[], idUsuario: number, tipoRelacion: string) {
     const params = new HttpParams()
       .set('idRelacionado', idUsuario.toString())

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 
@@ -8,9 +9,11 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./inicio.component.scss']
 })
 export class InicioComponent {
+  @ViewChild('leyendaDialog') leyendaDialog!: any;
   constructor(
     private router: Router,
-    private userService : UserService
+    private userService : UserService,
+    private dialog: MatDialog
   ) {}
 
   isAdmin(): boolean {
@@ -20,5 +23,11 @@ export class InicioComponent {
 
   navigateTo(route: string): void {
     this.router.navigate([route]);
+  }
+  mostrarLeyenda(): void {
+    this.dialog.open(this.leyendaDialog, {
+      width: '400px',
+      panelClass: 'custom-dialog-container'
+    });
   }
 }

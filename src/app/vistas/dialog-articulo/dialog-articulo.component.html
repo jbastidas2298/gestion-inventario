@@ -1,112 +1,83 @@
 <h2 mat-dialog-title>{{ data?.id ? 'Editar Artículo' : 'Agregar Artículo' }}</h2>
-<mat-dialog-content class="form-container">
-  <form [formGroup]="articuloForm">
-    <div class="field-row">
-      <mat-form-field appearance="fill">
+
+<mat-dialog-content>
+  <form [formGroup]="articuloForm" style="display: grid; gap: 16px;">
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <mat-form-field appearance="fill" style="flex: 1;">
         <mat-label>Código Origen</mat-label>
-        <input matInput formControlName="codigoOrigen" [readonly]="mostrarEscaner"
-          placeholder="Escanea o ingresa el código" />
+        <input matInput formControlName="codigoOrigen" [readonly]="mostrarEscaner" placeholder="Escanea o ingresa el código" />
       </mat-form-field>
-      <button mat-stroked-button color="primary" *ngIf="!data?.id" (click)="activarEscaner()">
+      <button mat-raised-button color="primary" *ngIf="!data?.id" (click)="activarEscaner()">
         <mat-icon>qr_code_scanner</mat-icon>
-        Escanear Código
+        Escanear
       </button>
     </div>
 
-    <div *ngIf="mostrarEscaner" class="scanner-container">
-      <video #video autoplay></video>
-      <button mat-stroked-button color="warn" (click)="desactivarEscaner()">Cerrar Escáner</button>
+    <div *ngIf="mostrarEscaner" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+      <video #video autoplay style="width: 100%; max-width: 480px;"></video>
+      <button mat-raised-button color="warn" (click)="desactivarEscaner()">Cerrar Escáner</button>
     </div>
 
-    <div class="field-row" *ngIf="data?.id">
-      <mat-form-field appearance="fill">
-        <mat-label>Código Interno</mat-label>
-        <input matInput formControlName="codigoInterno" readonly />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill" *ngIf="data?.id">
+      <mat-label>Código Interno</mat-label>
+      <input matInput formControlName="codigoInterno" readonly />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Marca</mat-label>
-        <input matInput formControlName="marca" />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Marca</mat-label>
+      <input matInput formControlName="marca" />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Serie</mat-label>
-        <input matInput formControlName="serie" />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Serie</mat-label>
+      <input matInput formControlName="serie" />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Modelo</mat-label>
-        <input matInput formControlName="modelo" />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Modelo</mat-label>
+      <input matInput formControlName="modelo" />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Ubicacion Edificio</mat-label>
-        <input matInput formControlName="ubicacion" />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Ubicación Edificio</mat-label>
+      <input matInput formControlName="ubicacion" />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Sección</mat-label>
-        <input matInput formControlName="seccion" />
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Sección</mat-label>
+      <input matInput formControlName="seccion" />
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Grupo Activo</mat-label>
-        <mat-select formControlName="grupoActivo">
-          <mat-option *ngFor="let grupo of grupoActivo" [value]="grupo">
-            {{ grupo }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Grupo Activo</mat-label>
+      <mat-select formControlName="grupoActivo">
+        <mat-option *ngFor="let grupo of grupoActivo" [value]="grupo">{{ grupo }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Estado</mat-label>
-        <mat-select formControlName="estado">
-          <mat-option *ngFor="let estado of estados" [value]="estado">
-            {{ estado }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Observación</mat-label>
+      <textarea matInput formControlName="observacion"></textarea>
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Observación</mat-label>
-        <textarea matInput formControlName="observacion"></textarea>
-      </mat-form-field>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="descripcion"></textarea>
+    </mat-form-field>
 
-    <div class="field-row">
-      <mat-form-field appearance="fill">
-        <mat-label>Descripción</mat-label>
-        <textarea matInput formControlName="descripcion"></textarea>
-      </mat-form-field>
-    </div>
-
-    <div class="field-row" *ngIf="!data?.id">
-      <mat-checkbox formControlName="asignarseArticulo">Asignarse Artículo</mat-checkbox>
-    </div>
+    <mat-checkbox formControlName="asignarseArticulo" *ngIf="!data?.id">Asignarse Artículo</mat-checkbox>
   </form>
 </mat-dialog-content>
 

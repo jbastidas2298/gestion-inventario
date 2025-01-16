@@ -1,9 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// Crear una paleta personalizada
+$primary-palette: mat.define-palette((
+  50: #e0f2e9,
+  100: #b3e0c8,
+  200: #80cfa4,
+  300: #4dbd80,
+  400: #26ad66,
+  500: #279957, // Color principal
+  600: #22854a,
+  700: #1d7240,
+  800: #195f36,
+  900: #124426,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff, // Contraste para el color primario
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+  )
+));
+
+// Crear una paleta de advertencia personalizada (opcional)
+$warn-palette: mat.define-palette(mat.$red-palette);
+
+// Crear el tema completo
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: mat.define-palette(mat.$pink-palette), 
+    warn: $warn-palette, 
+  ),
+  typography: mat.define-typography-config(),
+));
+
+@include mat.all-component-themes($custom-theme);
+
+
+.inicio-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(-135deg, #30B86B 50%, #f1f1f1 50%);
+  padding: 20px;
+}
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .error-snackbar {
-  background-color: #f44336 !important; 
+  background-color: #be1104 !important; 
 }
 
 .success-snackbar {
@@ -17,33 +68,5 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --text-color: #ffffff; 
   --hover-color: #279957; 
 }
-.page-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; 
-}
 
-.main-content {
-  flex: 1; 
-}
 
-.button-agregar {
-  background-color: #216122; 
-  color: #FFFFFF; 
-}
-
-.button-generar {
-  background-color: #e7331b;
-  color: #FFFFFF; 
-}
-
-.inicio-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 20px;
-  background: linear-gradient(-135deg, #30B86B 50%, #f1f1f1 50%);
-  min-height: 100vh;
-  box-sizing: border-box;
-}

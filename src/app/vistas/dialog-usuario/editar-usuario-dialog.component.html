@@ -1,45 +1,62 @@
 <h2 mat-dialog-title>{{ data.esNuevo ? 'Agregar Usuario' : 'Editar Usuario' }}</h2>
+
 <div mat-dialog-content>
-  <form [formGroup]="usuarioForm" class="usuario-form">
-    <mat-form-field appearance="fill">
+  <form [formGroup]="usuarioForm" style="display: flex; flex-direction: column; gap: 16px;">
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Nombre de Usuario</mat-label>
       <input matInput formControlName="nombreUsuario" />
-      <mat-error *ngIf="usuarioForm.get('nombreUsuario')?.hasError('required')">El nombre de usuario es obligatorio</mat-error>
-      <mat-error *ngIf="usuarioForm.get('nombreUsuario')?.hasError('minlength')">Debe tener al menos 3 caracteres</mat-error>
+      <mat-error *ngIf="usuarioForm.get('nombreUsuario')?.hasError('required')">
+        El nombre de usuario es obligatorio
+      </mat-error>
+      <mat-error *ngIf="usuarioForm.get('nombreUsuario')?.hasError('minlength')">
+        Debe tener al menos 3 caracteres
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Contraseña</mat-label>
       <input matInput type="password" formControlName="contrasena" />
-      <mat-error *ngIf="usuarioForm.get('contrasena')?.hasError('required')">La contraseña es obligatoria</mat-error>
-      <mat-error *ngIf="usuarioForm.get('contrasena')?.hasError('minlength')">Debe tener al menos 6 caracteres</mat-error>
+      <mat-error *ngIf="usuarioForm.get('contrasena')?.hasError('required')">
+        La contraseña es obligatoria
+      </mat-error>
+      <mat-error *ngIf="usuarioForm.get('contrasena')?.hasError('minlength')">
+        Debe tener al menos 6 caracteres
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Correo Electrónico</mat-label>
       <input matInput type="email" formControlName="correo" />
-      <mat-error *ngIf="usuarioForm.get('correo')?.hasError('required')">El correo es obligatorio</mat-error>
-      <mat-error *ngIf="usuarioForm.get('correo')?.hasError('email')">Correo no válido</mat-error>
+      <mat-error *ngIf="usuarioForm.get('correo')?.hasError('required')">
+        El correo es obligatorio
+      </mat-error>
+      <mat-error *ngIf="usuarioForm.get('correo')?.hasError('email')">
+        Correo no válido
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Nombre Completo</mat-label>
       <input matInput formControlName="nombreCompleto" />
-      <mat-error *ngIf="usuarioForm.get('nombreCompleto')?.hasError('required')">El nombre completo es obligatorio</mat-error>
+      <mat-error *ngIf="usuarioForm.get('nombreCompleto')?.hasError('required')">
+        El nombre completo es obligatorio
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Roles</mat-label>
       <mat-select formControlName="roles" multiple>
         <mat-option *ngFor="let rol of rolesDisponibles" [value]="rol">{{ rol }}</mat-option>
       </mat-select>
-      <mat-error *ngIf="usuarioForm.get('roles')?.hasError('required')">Debe seleccionar al menos un rol</mat-error>
+      <mat-error *ngIf="usuarioForm.get('roles')?.hasError('required')">
+        Debe seleccionar al menos un rol
+      </mat-error>
     </mat-form-field>
 
     <mat-checkbox formControlName="activo">Activo</mat-checkbox>
   </form>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions style="display: flex; justify-content: flex-end; gap: 8px;">
   <button mat-button (click)="cancelar()">Cancelar</button>
   <button mat-raised-button color="primary" (click)="guardar()" [disabled]="usuarioForm.invalid">Guardar</button>
 </div>

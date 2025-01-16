@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingService } from './loading.service';
 import { NotificationService } from './Notification.service';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
 
 @Injectable()
@@ -30,16 +37,24 @@ export class Interceptor implements HttpInterceptor {
     }
 
     this.loadingService.show();
+
     return next.handle(request).pipe(
       delay(300),
+      map((event: HttpEvent<any>) => {
+        // Manejar respuestas de texto plano
+        if (
+          event instanceof HttpResponse &&
+          event.headers.get('content-type')?.includes('text/plain')
+        ) {
+          return event.clone({ body: event.body });
+        }
+        return event;
+      }),
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta de nuevo.';
 
-        if (error.status === 200) {
-          return throwError(() => null);
-        }
-
         if (error.error instanceof ErrorEvent) {
+          // Errores del cliente o de red
           errorMessage = `Error: ${error.error.message}`;
         } else if (error.status) {
           errorMessage = `Error ${error.status}: ${error.message}`;

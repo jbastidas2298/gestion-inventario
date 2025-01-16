@@ -1,11 +1,11 @@
   .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta el número de columnas automáticamente */
     gap: 20px; 
     justify-items: center;
     align-items: center;
     width: 100%;
-    max-width: 900px;
+    max-width: 900px; /* Limita el ancho máximo */
   }
   
   .dashboard-item {
@@ -17,7 +17,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s, box-shadow 0.3s;
     width: 90%; 
-  
+
     &:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -46,7 +46,7 @@
     }
   
     .dashboard-item {
-      width: 100%;
+      width: 100%; 
     }
   }
   

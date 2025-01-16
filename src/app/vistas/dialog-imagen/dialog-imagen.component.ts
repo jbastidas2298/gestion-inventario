@@ -1,22 +1,29 @@
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  ViewChild,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/Notification.service';
 
 @Component({
   selector: 'app-dialog-imagen',
   templateUrl: './dialog-imagen.component.html',
-  styleUrls: ['./dialog-imagen.component.scss']
+  styleUrls: ['./dialog-imagen.component.scss'],
 })
-export class DialogImagenComponent  implements AfterViewInit {
-  @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas') canvasElement!: ElementRef<HTMLCanvasElement>;
+export class DialogImagenComponent implements AfterViewInit {
+  @ViewChild('video') elementoVideo!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas') elementoCanvas!: ElementRef<HTMLCanvasElement>;
 
-  selectedFile: File | null = null;
+  archivoSeleccionado: File | null = null;
   mostrarCamara: boolean = false;
-  capturedImage: string | null = null;
+  imagenCapturada: string | null = null;
 
-  constructor(public dialogRef: MatDialogRef<DialogImagenComponent>,
-    public notificacion : NotificationService
+  constructor(
+    public referenciaDialogo: MatDialogRef<DialogImagenComponent>,
+    public notificacion: NotificationService
   ) {}
 
   ngAfterViewInit(): void {
@@ -25,11 +32,11 @@ export class DialogImagenComponent  implements AfterViewInit {
     }
   }
 
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-      this.capturedImage = null; 
+  seleccionarArchivo(evento: any): void {
+    const archivo: File = evento.files[0]; 
+    if (archivo) {
+      this.archivoSeleccionado = archivo;
+      this.imagenCapturada = null;
     }
   }
 
@@ -39,75 +46,79 @@ export class DialogImagenComponent  implements AfterViewInit {
   }
 
   cerrarCamara(): void {
-    this.mostrarCamara = false;
-    const video = this.videoElement.nativeElement;
-    const stream = video.srcObject as MediaStream;
-    if (stream) {
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => track.stop());
+    if (this.mostrarCamara && this.elementoVideo) {
+      this.mostrarCamara = false;
+      const video = this.elementoVideo.nativeElement;
+      const flujo = video.srcObject as MediaStream;
+      if (flujo) {
+        flujo.getTracks().forEach((pista) => pista.stop());
+        video.srcObject = null; 
+      }
     }
   }
+  
 
   iniciarCamara(): void {
     navigator.mediaDevices
       .getUserMedia({ video: true })
-      .then((stream) => {
-        const video = this.videoElement.nativeElement;
-        video.srcObject = stream;
+      .then((flujo) => {
+        const video = this.elementoVideo.nativeElement;
+        video.srcObject = flujo;
         video.play();
       })
-      .catch((err) => this.notificacion.showError('Error al acceder a la cámara: ' + err));
+      .catch((error) =>
+        this.notificacion.showError('Error al acceder a la cámara: ' + error)
+      );
   }
 
   capturarFoto(): void {
-    const video = this.videoElement.nativeElement;
-    const canvas = this.canvasElement.nativeElement;
-    const context = canvas.getContext('2d');
-  
-    if (context) {
+    const video = this.elementoVideo.nativeElement;
+    const canvas = this.elementoCanvas.nativeElement;
+    const contexto = canvas.getContext('2d');
+
+    if (contexto) {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const base64Image = canvas.toDataURL('image/png');
-      const file = this.base64ToFile(base64Image, `captura_${Date.now()}.png`);
-  
-      this.cerrarCamara(); 
-      this.dialogRef.close(file); 
+      contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const imagenBase64 = canvas.toDataURL('image/png');
+      this.imagenCapturada = imagenBase64;
+      this.archivoSeleccionado = null; 
     }
   }
-  
-  
 
-  onUpload(): void {
-    let fileToUpload: File | null = this.selectedFile;
-      if (this.capturedImage) {
-      fileToUpload = this.base64ToFile(
-        this.capturedImage,
+  subirImagen(): void {
+    let archivoParaSubir: File | null = this.archivoSeleccionado;
+    if (this.imagenCapturada) {
+      archivoParaSubir = this.base64AArchivo(
+        this.imagenCapturada,
         `captura_${Date.now()}.png`
       );
     }
-  
-    if (fileToUpload) {
-      this.dialogRef.close(fileToUpload); 
+    this.cerrarCamara();
+    if (archivoParaSubir) {
+      this.referenciaDialogo.close(archivoParaSubir);
     } else {
-      this.notificacion.showError('No hay archivo seleccionado o imagen capturada.');
+      this.notificacion.showError(
+        'No hay archivo seleccionado o imagen capturada.'
+      );
     }
   }
 
-  onCancel(): void {
-    this.dialogRef.close();
+  cancelar(): void {
+    this.cerrarCamara(); 
+    this.referenciaDialogo.close();
   }
 
-  private base64ToFile(base64: string, fileName: string): File {
-    const arr = base64.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
+  private base64AArchivo(base64: string, nombreArchivo: string): File {
+    const arreglo = base64.split(',');
+    const mime = arreglo[0].match(/:(.*?);/)[1];
+    const bstr = atob(arreglo[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], fileName, { type: mime });
+    return new File([u8arr], nombreArchivo, { type: mime });
   }
-  
 }

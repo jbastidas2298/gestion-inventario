@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
 import { PageEvent } from '@angular/material/paginator';
+import { DialogConfirmarComponent } from '../dialog-confirmar/dialog-confirmar.component';
 
 @Component({
   selector: 'app-inventario-articulo',
@@ -18,10 +19,10 @@ export class InventarioArticuloComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   articulos: any[] = [];
   filteredArticulos: any[] = [];
-  displayedColumns: string[] = ['seleccionar','revisar','codigoOrigen', 'codigoInterno', 'nombre', 'acciones'];
-  selectedRows: Set<number> = new Set(); 
+  displayedColumns: string[] = ['seleccionar', 'revisar', 'codigoOrigen', 'codigoInterno', 'nombre', 'acciones'];
+  selectedRows: Set<number> = new Set();
   filtro: string = '';
-  totalElements = 0; 
+  totalElements = 0;
   pageSize = 10;
   pageIndex = 0;
 
@@ -30,8 +31,8 @@ export class InventarioArticuloComponent implements OnInit {
     private itemsService: ItemsService,
     private notificationService: NotificationService,
     private router: Router,
-    private userService : UserService,
-    private archivoService : ArchivoService
+    private userService: UserService,
+    private archivoService: ArchivoService
   ) { }
 
   ngOnInit() {
@@ -48,7 +49,7 @@ export class InventarioArticuloComponent implements OnInit {
     });
   }
 
-  applyFilter(event: Event): void {
+  aplicarFiltro(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim();
     this.filtro = filterValue;
     this.cargarArticulos(this.pageIndex, this.pageSize);
@@ -60,8 +61,12 @@ export class InventarioArticuloComponent implements OnInit {
     this.cargarArticulos(this.pageIndex, this.pageSize);
   }
 
-  onAdd() {
-    const dialogRef = this.dialog.open(DialogArticuloComponent);
+  agregarItem() {
+    const dialogRef = this.dialog.open(DialogArticuloComponent, {
+      width: '500px',
+      height: 'auto',
+      data: null
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -69,13 +74,15 @@ export class InventarioArticuloComponent implements OnInit {
       }
     });
   }
-  
+
   Revisar(articulo: any) {
     this.router.navigate(['/inventario-detalle', articulo.id]);
   }
 
-  onEdit(articulo: any) {
+  editarItem(articulo: any) {
     const dialogRef = this.dialog.open(DialogArticuloComponent, {
+      width: '500px',
+      height: 'auto',
       data: articulo
     });
 
@@ -85,13 +92,31 @@ export class InventarioArticuloComponent implements OnInit {
       }
     });
   }
-  onDelete(id: number) {
-    if (confirm('¿Estás seguro de eliminar este artículo?')) {
-      this.itemsService.eliminarItem(id).subscribe(() => this.cargarArticulos());
-    }
+
+
+  eliminarItem(id: number): void {
+    const dialogRef = this.dialog.open(DialogConfirmarComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Confirmar Eliminación',
+        mensaje: '¿Estás seguro de eliminar este artículo?',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.itemsService.eliminarItem(id).
+        subscribe({
+          next: () => {
+            this.cargarArticulos(); 
+            this.notificationService.showSuccess('Artículo eliminado exitosamente.');
+          },
+        });
+      }
+    });
   }
 
-  onAddImage(id: number) {
+  agregarImagen(id: number) {
     const dialogRef = this.dialog.open(DialogImagenComponent);
 
     dialogRef.afterClosed().subscribe((file: File) => {
@@ -109,11 +134,11 @@ export class InventarioArticuloComponent implements OnInit {
   isAllSelected(): boolean {
     return this.selectedRows.size === this.filteredArticulos.length;
   }
-  
+
   isSomeSelected(): boolean {
     return this.selectedRows.size > 0 && !this.isAllSelected();
   }
-  
+
   toggleAllRows(event: any): void {
     if (event.checked) {
       this.filteredArticulos.forEach((articulo: any) => this.selectedRows.add(articulo.id));
@@ -121,7 +146,7 @@ export class InventarioArticuloComponent implements OnInit {
       this.selectedRows.clear();
     }
   }
-  
+
   toggleRowSelection(articulo: any): void {
     if (this.selectedRows.has(articulo.id)) {
       this.selectedRows.delete(articulo.id);
@@ -129,20 +154,20 @@ export class InventarioArticuloComponent implements OnInit {
       this.selectedRows.add(articulo.id);
     }
   }
-  
+
   isRowSelected(articulo: any): boolean {
     return this.selectedRows.has(articulo.id);
   }
-  
-  generarCodigosBarra(): void {
-    const selectedIds = Array.from(this.selectedRows);
 
-    if (selectedIds.length === 0) {
+  generarCodigosBarra(): void {
+    const itemSeleccionados = Array.from(this.selectedRows).map((row: any) => row.id);
+
+    if (itemSeleccionados.length === 0) {
       this.notificationService.showError('Por favor, selecciona al menos un artículo.');
       return;
     }
 
-    this.archivoService.generarReporteCodigosBarra(selectedIds).subscribe({
+    this.archivoService.generarReporteCodigosBarra(itemSeleccionados).subscribe({
       next: (pdfBlob) => {
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
@@ -157,7 +182,7 @@ export class InventarioArticuloComponent implements OnInit {
   }
 
   triggerFileInput() {
-    this.fileInput.nativeElement.click(); 
+    this.fileInput.nativeElement.click();
   }
 
   importarExcel(event: Event) {
@@ -170,10 +195,16 @@ export class InventarioArticuloComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    const roles = this.userService.getRoles(); 
+    const roles = this.userService.getRoles();
     return roles.includes('ADMINISTRADOR');
   }
 
+  onLazyLoad(event: any): void {
+    const page = Math.floor(event.first / event.rows);
+    const size = event.rows;
+    this.pageIndex = page;
+    this.pageSize = size;
+    this.cargarArticulos(page, size);
+  }
 
-  
 }
