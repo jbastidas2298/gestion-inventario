@@ -19,7 +19,6 @@ export class InventarioArticuloComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   articulos: any[] = [];
   filteredArticulos: any[] = [];
-  displayedColumns: string[] = ['seleccionar', 'revisar', 'codigoOrigen', 'codigoInterno', 'nombre', 'acciones'];
   selectedRows: Set<number> = new Set();
   filtro: string = '';
   totalElements = 0;
@@ -48,6 +47,7 @@ export class InventarioArticuloComponent implements OnInit {
       this.pageIndex = data.number || 0;
     });
   }
+  
 
   aplicarFiltro(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim();
@@ -131,33 +131,6 @@ export class InventarioArticuloComponent implements OnInit {
     });
   }
 
-  isAllSelected(): boolean {
-    return this.selectedRows.size === this.filteredArticulos.length;
-  }
-
-  isSomeSelected(): boolean {
-    return this.selectedRows.size > 0 && !this.isAllSelected();
-  }
-
-  toggleAllRows(event: any): void {
-    if (event.checked) {
-      this.filteredArticulos.forEach((articulo: any) => this.selectedRows.add(articulo.id));
-    } else {
-      this.selectedRows.clear();
-    }
-  }
-
-  toggleRowSelection(articulo: any): void {
-    if (this.selectedRows.has(articulo.id)) {
-      this.selectedRows.delete(articulo.id);
-    } else {
-      this.selectedRows.add(articulo.id);
-    }
-  }
-
-  isRowSelected(articulo: any): boolean {
-    return this.selectedRows.has(articulo.id);
-  }
 
   generarCodigosBarra(): void {
     const itemSeleccionados = Array.from(this.selectedRows).map((row: any) => row.id);

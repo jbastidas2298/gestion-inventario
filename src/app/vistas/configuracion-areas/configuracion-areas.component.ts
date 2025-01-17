@@ -36,7 +36,7 @@ export class ConfiguracionAreasComponent implements OnInit {
   }
 
   cargarUsuarios() {
-    this.userService.getUsuarios().subscribe({
+    this.userService.obtenerUsuarios().subscribe({
       next: (data) => (this.usuarios = data),
     });
   }

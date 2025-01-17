@@ -1,13 +1,15 @@
 <p-card class="mat-elevation-z4" [ngStyle]="{ height: '100vh', display: 'flex', flexDirection: 'column' }">
   <div [ngStyle]="{ display: 'flex', flexWrap: 'wrap', gap: '16px' }">
-    <div style="display: flex; gap: 16px;">
-      <button mat-raised-button color="primary" (click)="asignacionVarios()">
-        <mat-icon>assignment</mat-icon> Asignar Seleccionados
-      </button>
-      <button mat-raised-button color="accent" (click)="reasignarAsignacionTodos()">
-        <mat-icon>assignment</mat-icon> Reasignar Usuario
-      </button>
-    </div>
+    <button mat-raised-button color="primary" (click)="asignacionVarios()">
+      <mat-icon>assignment</mat-icon> Asignar Seleccionados
+    </button>
+    <button mat-raised-button color="accent" (click)="reasignarAsignacionTodos()">
+      <mat-icon>assignment</mat-icon> Reasignar Usuario
+    </button>
+    <button mat-raised-button color="accent" (click)="generarReporteExcel()">
+      <img src="assets/excel.png" alt="Excel" style="width: 20px; height: 20px; margin-right: 8px;" />
+      Generar Reporte
+    </button>
 
     <mat-form-field appearance="outline" [ngStyle]="{ marginTop: '16px', width: '100%' }">
       <mat-icon matPrefix>search</mat-icon>
@@ -18,7 +20,7 @@
   <div [ngStyle]="{ flex: 1, overflowX: 'auto', marginTop: '16px' }">
     <p-table [value]="filteredAsignacion" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
       [rowsPerPageOptions]="[5, 10, 20]" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [(selection)]="seleccionados"
-      [style]="{ width: '100%' }">
+      [style]="{ width: '100%' }" [scrollable]="true">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 3em;">

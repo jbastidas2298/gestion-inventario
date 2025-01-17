@@ -37,8 +37,17 @@ export class UserService {
     return this.http.get(this.apiUrl+'/usuarioCompleto/'+username);
   }
 
-  getUsuarios(): Observable<Usuario[]> {
+  obtenerUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.apiUrl);
+  }
+
+  consultarUsuarios(page: number = 0, size: number = 10, filter: string = ''): Observable<any> {
+    const params = { 
+      page: page.toString(), 
+      size: size.toString(), 
+      filter 
+    };
+    return this.http.get(`${this.apiUrl}/usuariosPaginados`, { params });
   }
 
   crearUsuario(usuario: Usuario): Observable<Usuario> {

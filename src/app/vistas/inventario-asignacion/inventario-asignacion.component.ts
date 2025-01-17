@@ -153,19 +153,31 @@ export class InventarioAsignacionComponent implements OnInit {
     });
   }
 
-
   applyFilter(event: Event) {
     this.filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.cargarAsignaciones(this.currentPage, this.pageSize, this.filterValue);
   }
-
-
 
   onLazyLoad(event: any) {
     const page = event.first / event.rows;
     const size = event.rows;
     const filter = this.filterValue || '';
     this.cargarAsignaciones(page, size, filter);
+  }
+
+  generarReporteExcel() {
+    this.archivoService.generarReporteExcelAsignaciones().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte_asignaciones.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+    });
   }
 
 }

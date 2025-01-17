@@ -77,5 +77,12 @@ export class ArchivoService {
     formData.append('file', file); 
     return this.http.post<string>(`${this.apiUrl}/importar-excel`, formData);
   }
+
+  generarReporteExcelAsignaciones(): Observable<Blob> {
+    const url = `${this.apiUrl}/reporte-excel`;
+    return this.http.get(url, {
+      responseType: 'blob', 
+    });
+  }
   
 }

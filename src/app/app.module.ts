@@ -12,7 +12,6 @@ import { LoginComponent } from './vistas/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { LeyendaComponent } from './general/leyenda/leyenda.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -53,7 +52,6 @@ import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    LeyendaComponent,
     InicioComponent,
     BarraComponent,
     ConfiguracionMenuComponent,
