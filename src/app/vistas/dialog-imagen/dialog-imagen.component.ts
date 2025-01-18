@@ -96,8 +96,18 @@ export class DialogImagenComponent implements AfterViewInit {
       );
     }
     this.cerrarCamara();
+
     if (archivoParaSubir) {
-      this.referenciaDialogo.close(archivoParaSubir);
+      const tipoMime = archivoParaSubir.type.toLowerCase();
+      const extensionesPermitidas = ['image/png', 'image/jpeg'];
+  
+      if (!extensionesPermitidas.includes(tipoMime)) {
+        this.notificacion.showError(
+          'Solo se permiten archivos en formato PNG o JPEG.'
+        );
+        return;
+      }
+        this.referenciaDialogo.close(archivoParaSubir);
     } else {
       this.notificacion.showError(
         'No hay archivo seleccionado o imagen capturada.'

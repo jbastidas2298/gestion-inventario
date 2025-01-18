@@ -10,13 +10,29 @@
       <img src="assets/excel.png" alt="Excel" style="width: 20px; height: 20px; margin-right: 8px;" />
       Generar Reporte
     </button>
-
-    <mat-form-field appearance="outline" [ngStyle]="{ marginTop: '16px', width: '100%' }">
-      <mat-icon matPrefix>search</mat-icon>
-      <mat-label>Filtrar Asignaciones</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Escribe aquí para filtrar..." />
-    </mat-form-field>
   </div>
+  <br />
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Filtros </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div [ngStyle]="{ display: 'flex', flexWrap: 'wrap', gap: '16px', padding: '16px' }">
+      <mat-form-field appearance="outline" [ngStyle]="{ flex: '1 1 100%' }">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Buscar Artículo</mat-label>
+        <input matInput [(ngModel)]="filtroArticulo" placeholder="Escribe aquí para filtrar artículos..." />
+      </mat-form-field>
+      <mat-form-field appearance="outline" [ngStyle]="{ flex: '1 1 100%' }">
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Buscar Usuario</mat-label>
+        <input matInput [(ngModel)]="filtroUsuario" placeholder="Escribe aquí para filtrar usuarios..." />
+      </mat-form-field>
+      <button mat-raised-button color="primary" [ngStyle]="{ flex: '1 1 100%' }" (click)="aplicarFiltro()">
+        <mat-icon>search</mat-icon> Buscar
+      </button>
+    </div>
+  </mat-expansion-panel>
+
   <div [ngStyle]="{ flex: 1, overflowX: 'auto', marginTop: '16px' }">
     <p-table [value]="filteredAsignacion" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
       [rowsPerPageOptions]="[5, 10, 20]" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [(selection)]="seleccionados"
@@ -26,9 +42,10 @@
           <th style="width: 3em;">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th>Cod. Interno</th>
+          <th>Articulo</th>
           <th>Cod. Origen</th>
           <th>Usuario/Área</th>
+          <th>Fecha Asignación</th>
           <th>Acciones</th>
         </tr>
       </ng-template>
@@ -38,15 +55,19 @@
           <td>
             <p-tableCheckbox [value]="articuloAsignacion"></p-tableCheckbox>
           </td>
-          <td>{{ articuloAsignacion.codigoInterno }}</td>
+          <td>{{ articuloAsignacion.nombreArticulo }}</td>
           <td>{{ articuloAsignacion.codigoOrigen }}</td>
           <td>{{ articuloAsignacion.nombreAsignado }}</td>
+          <td>{{ articuloAsignacion.fechaAsignacion }}</td>
           <td>
             <button mat-icon-button color="primary" (click)="editarAsignacion(articuloAsignacion)">
               <mat-icon>assignment</mat-icon>
             </button>
-            <button mat-icon-button color="accent" (click)="generarReporteActaEntrega(articuloAsignacion)">
+            <button mat-icon-button color="accent" (click)="generarReporteActaEntrega(articuloAsignacion)" [disabled]="!articuloAsignacion.idUsuario">
               <mat-icon>download</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminarAsignacion(articuloAsignacion)" [disabled]="!articuloAsignacion.idUsuario">
+              <mat-icon>delete</mat-icon>
             </button>
           </td>
         </tr>

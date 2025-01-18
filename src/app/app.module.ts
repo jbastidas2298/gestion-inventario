@@ -48,6 +48,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DialogConfirmarComponent } from './vistas/dialog-confirmar/dialog-confirmar.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,7 +69,7 @@ import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
     AsignacionDialogComponent,
     LoadingComponent,
     DialogConfirmarComponent,
-    DialogPdfComponent
+    DialogPdfComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,7 +92,6 @@ import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
     MatDialogModule,
     MatSelectModule,
     MatCheckboxModule,
-    //ZXingScannerModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatGridListModule,
@@ -101,7 +101,8 @@ import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
     CardModule,
     AccordionModule,
     FileUploadModule,
-    MatDividerModule
+    MatDividerModule,
+    MatExpansionModule
   ],
   providers: [
     {

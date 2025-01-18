@@ -24,7 +24,7 @@ export class InventarioArticuloComponent implements OnInit {
   totalElements = 0;
   pageSize = 10;
   pageIndex = 0;
-
+  delayTimer: any; 
   constructor(
     private dialog: MatDialog,
     private itemsService: ItemsService,
@@ -52,7 +52,12 @@ export class InventarioArticuloComponent implements OnInit {
   aplicarFiltro(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim();
     this.filtro = filterValue;
-    this.cargarArticulos(this.pageIndex, this.pageSize);
+
+    clearTimeout(this.delayTimer);
+    this.delayTimer = setTimeout(() => {
+      this.filtro = filterValue;
+      this.cargarArticulos(this.pageIndex, this.pageSize);
+    }, 300);
   }
 
   onPageChange(event: PageEvent): void {

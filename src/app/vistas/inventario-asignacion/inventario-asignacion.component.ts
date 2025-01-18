@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AsignacionDialogComponent } from '../dialog-asignacion/asignacion-dialog.component';
 import { NotificationService } from 'src/app/services/Notification.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
+import { DialogConfirmarComponent } from '../dialog-confirmar/dialog-confirmar.component';
 
 @Component({
   selector: 'app-inventario-asignacion',
@@ -16,10 +17,11 @@ export class InventarioAsignacionComponent implements OnInit {
   articulosAsignacion: any[] = [];
   seleccionados: Set<number> = new Set();
   filteredAsignacion: any[] = [];
-  filterValue: string = '';
+  filtroArticulo: string = '';
   currentPage: number = 0;
   pageSize: number = 10;
   totalRecords: number = 0;
+  filtroUsuario: string = '';
 
   constructor(
     private userService: UserService,
@@ -34,8 +36,8 @@ export class InventarioAsignacionComponent implements OnInit {
     this.cargarAsignaciones();
   }
 
-  cargarAsignaciones(page: number = 0, size: number = 10, filter: string = '') {
-    this.itemsService.obtenerAsignaciones(page, size, filter).subscribe((data: any) => {
+  cargarAsignaciones(page: number = 0, size: number = 10, filter: string = '', filter_usuario: string = '') {
+    this.itemsService.obtenerAsignaciones(page, size, filter,filter_usuario).subscribe((data: any) => {
       this.articulosAsignacion = data.content;
       this.filteredAsignacion = [...this.articulosAsignacion];
       this.totalRecords = data.totalElements;
@@ -153,16 +155,17 @@ export class InventarioAsignacionComponent implements OnInit {
     });
   }
 
-  applyFilter(event: Event) {
-    this.filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.cargarAsignaciones(this.currentPage, this.pageSize, this.filterValue);
+  aplicarFiltro() {
+    this.cargarAsignaciones(this.currentPage, this.pageSize, this.filtroArticulo, this.filtroUsuario);
+    
   }
 
   onLazyLoad(event: any) {
     const page = event.first / event.rows;
     const size = event.rows;
-    const filter = this.filterValue || '';
-    this.cargarAsignaciones(page, size, filter);
+    const filter_usuario = this.filtroUsuario || '';
+    const filter_articulo = this.filtroArticulo || '';
+    this.cargarAsignaciones(page, size, filter_articulo, filter_usuario);
   }
 
   generarReporteExcel() {
@@ -178,6 +181,27 @@ export class InventarioAsignacionComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       },
     });
+  }
+
+  eliminarAsignacion(articuloAsignacion: any) {
+    const dialogRef = this.dialog.open(DialogConfirmarComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Confirmar Eliminación',
+        mensaje: '¿Estás seguro de eliminar la asignación del artículo ' + articuloAsignacion.nombreArticulo + ' a '+ articuloAsignacion.nombreAsignado  +'?',
+      },
+    }); 
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.itemsService.eliminarAsignacion(articuloAsignacion.idArticulo).subscribe({
+          next: () => {
+            this.notificacion.showSuccess('Asignación eliminada exitosamente.');
+            this.cargarAsignaciones();
+          },
+        });
+      }
+    });
+
   }
 
 }

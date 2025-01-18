@@ -36,11 +36,12 @@ export class ItemsService {
     return this.http.get<any>(`${this.apiUrl}/articuloDetalle/${id}`);
   }
 
-  obtenerAsignaciones(page: number, size: number, filter: string): Observable<any> {
+  obtenerAsignaciones(page: number, size: number, filter: string, filter_usuario: string): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('filter', filter);
+      .set('filter_articulo', filter)
+      .set('filter_usuario', filter_usuario);
     
     return this.http.get(`${this.apiUrl}/asignaciones`, { params });
   }
@@ -67,6 +68,10 @@ export class ItemsService {
       .set('descripcion', descripcion);
   
     return this.http.post(`${this.apiUrl}/reasignar-todos`, null, { params });
-  }  
+  }
+  
+  eliminarAsignacion(idArticulo: number) {
+    return this.http.delete(`${this.apiUrl}/eliminarAsignacion/${idArticulo}`, { responseType: 'text' });
+  }
   
 }
