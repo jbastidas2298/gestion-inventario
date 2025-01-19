@@ -25,6 +25,7 @@ export class InventarioArticuloComponent implements OnInit {
   pageSize = 10;
   pageIndex = 0;
   delayTimer: any; 
+  estadoFiltro: string = 'DISPONIBLE'; 
   constructor(
     private dialog: MatDialog,
     private itemsService: ItemsService,
@@ -39,7 +40,7 @@ export class InventarioArticuloComponent implements OnInit {
   }
 
   cargarArticulos(page: number = 0, size: number = 10): void {
-    this.itemsService.obtenerItems(page, size, this.filtro).subscribe((data: any) => {
+    this.itemsService.obtenerItems(page, size, this.filtro, this.estadoFiltro).subscribe((data: any) => {
       this.articulos = data.content || [];
       this.filteredArticulos = [...this.articulos];
       this.totalElements = data.totalElements || 0;
@@ -47,7 +48,6 @@ export class InventarioArticuloComponent implements OnInit {
       this.pageIndex = data.number || 0;
     });
   }
-  
 
   aplicarFiltro(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim();
@@ -58,6 +58,12 @@ export class InventarioArticuloComponent implements OnInit {
       this.filtro = filterValue;
       this.cargarArticulos(this.pageIndex, this.pageSize);
     }, 300);
+  }
+
+  filtrarPorEstado(estado: string): void {
+    this.estadoFiltro = estado;
+    this.pageIndex = 0; 
+    this.cargarArticulos(this.pageIndex, this.pageSize);
   }
 
   onPageChange(event: PageEvent): void {
@@ -104,7 +110,7 @@ export class InventarioArticuloComponent implements OnInit {
       width: '400px',
       data: {
         titulo: 'Confirmar Eliminación',
-        mensaje: '¿Estás seguro de eliminar este artículo?',
+        mensaje: '¿Estás seguro de que deseas eliminar este artículo? Esto eliminará por completo su historial y archivos asociados. Si es necesario conservar esta información, cambia el estado a "Dado de Baja".',
       },
     });
 
@@ -183,6 +189,19 @@ export class InventarioArticuloComponent implements OnInit {
     this.pageIndex = page;
     this.pageSize = size;
     this.cargarArticulos(page, size);
+  }
+
+  buscarDadosBaja() {
+    this.itemsService.obtenerItemsBaja().subscribe((data: any) => {
+      this.articulos = data || [];
+      this.filteredArticulos = [...this.articulos];
+    });
+  }
+  buscarServicioTecnico() {
+    this.itemsService.obtenerItemsServicioTecnico().subscribe((data: any) => {
+      this.articulos = data || [];
+      this.filteredArticulos = [...this.articulos];
+    });
   }
 
 }

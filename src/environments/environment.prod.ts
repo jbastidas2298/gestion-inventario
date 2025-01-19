@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://192.168.10.109:8097' 
+  apiUrl: 'https://facci-inventario:8097' 
 };

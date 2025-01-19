@@ -39,9 +39,7 @@ export class Interceptor implements HttpInterceptor {
     this.loadingService.show();
 
     return next.handle(request).pipe(
-      delay(300),
       map((event: HttpEvent<any>) => {
-        // Manejar respuestas de texto plano
         if (
           event instanceof HttpResponse &&
           event.headers.get('content-type')?.includes('text/plain')
@@ -53,17 +51,24 @@ export class Interceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta de nuevo.';
 
-        if (error.error instanceof ErrorEvent) {
-          // Errores del cliente o de red
-          errorMessage = `Error: ${error.error.message}`;
-        } else if (error.status) {
-          errorMessage = `Error ${error.status}: ${error.message}`;
-          if (error.error && typeof error.error === 'object' && error.error.mensaje) {
-            errorMessage = `Código del error: ${error.error.codigo}. Mensaje: ${error.error.mensaje}`;
+        if (error.error) {
+          if (typeof error.error === 'string') {
+            try {
+              const parsedError = JSON.parse(error.error);
+              if (parsedError.mensaje) {
+                errorMessage = `Código del error: ${parsedError.codigo || 'Desconocido'}. Mensaje: ${parsedError.mensaje}`;
+              }
+            } catch (e) {
+              errorMessage = error.error;
+            }
+          } else if (typeof error.error === 'object' && error.error.mensaje) {
+            const backendError = error.error as { codigo: string; mensaje: string };
+            errorMessage = `Código del error: ${backendError.codigo || 'Desconocido'}. Mensaje: ${backendError.mensaje}`;
           }
         }
 
         this.notificationService.showError(errorMessage);
+
         return throwError(() => error);
       }),
       finalize(() => this.loadingService.hide())

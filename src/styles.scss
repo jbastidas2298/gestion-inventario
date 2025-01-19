@@ -1,13 +1,12 @@
 @use '@angular/material' as mat;
 
-// Crear una paleta personalizada
 $primary-palette: mat.define-palette((
   50: #e0f2e9,
   100: #b3e0c8,
   200: #80cfa4,
   300: #4dbd80,
   400: #26ad66,
-  500: #279957, // Color principal
+  500: #279957, 
   600: #22854a,
   700: #1d7240,
   800: #195f36,
@@ -18,7 +17,7 @@ $primary-palette: mat.define-palette((
     200: #000000,
     300: #ffffff,
     400: #ffffff,
-    500: #ffffff, // Contraste para el color primario
+    500: #ffffff, 
     600: #ffffff,
     700: #ffffff,
     800: #ffffff,
@@ -26,10 +25,8 @@ $primary-palette: mat.define-palette((
   )
 ));
 
-// Crear una paleta de advertencia personalizada (opcional)
 $warn-palette: mat.define-palette(mat.$red-palette);
 
-// Crear el tema completo
 $custom-theme: mat.define-light-theme((
   color: (
     primary: $primary-palette,
@@ -52,10 +49,17 @@ $custom-theme: mat.define-light-theme((
   padding: 20px;
 }
 
-html, body { height: 100%; }
-.error-snackbar {
-  background-color: #be1104 !important; 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; 
+  .error-snackbar {
+    background-color: #be1104 !important; 
+  }
 }
+
 
 .success-snackbar {
   background-color: #4caf50 !important; 

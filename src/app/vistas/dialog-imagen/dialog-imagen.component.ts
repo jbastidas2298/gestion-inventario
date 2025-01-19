@@ -41,6 +41,7 @@ export class DialogImagenComponent implements AfterViewInit {
   }
 
   abrirCamara(): void {
+    this.cerrarCamara();
     this.mostrarCamara = true;
     this.iniciarCamara();
   }
@@ -59,8 +60,13 @@ export class DialogImagenComponent implements AfterViewInit {
   
 
   iniciarCamara(): void {
+    const opciones = {
+      video: {
+        facingMode: 'environment', 
+      },
+    };
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia(opciones)
       .then((flujo) => {
         const video = this.elementoVideo.nativeElement;
         video.srcObject = flujo;
@@ -85,6 +91,7 @@ export class DialogImagenComponent implements AfterViewInit {
       this.imagenCapturada = imagenBase64;
       this.archivoSeleccionado = null; 
     }
+    this.cerrarCamara();
   }
 
   subirImagen(): void {

@@ -11,11 +11,12 @@ export class ItemsService {
 
   constructor(private http: HttpClient) {}
 
-  obtenerItems(page: number = 0, size: number = 10, filter: string = ''): Observable<any> {
+  obtenerItems(page: number = 0, size: number = 10, filter: string = '', estado: string = ''): Observable<any> {
     const params = { 
       page: page.toString(), 
       size: size.toString(), 
-      filter 
+      filter,
+      estado
     };
     return this.http.get(`${this.apiUrl}`, { params });
   }
@@ -74,4 +75,11 @@ export class ItemsService {
     return this.http.delete(`${this.apiUrl}/eliminarAsignacion/${idArticulo}`, { responseType: 'text' });
   }
   
+  obtenerItemsServicioTecnico(){
+    return this.http.get(`${this.apiUrl}/servicio-tecnico`);
+  }
+
+  obtenerItemsBaja(){
+    return this.http.get(`${this.apiUrl}/baja`);
+  }
 }

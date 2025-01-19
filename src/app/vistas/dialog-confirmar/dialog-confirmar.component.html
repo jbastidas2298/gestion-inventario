@@ -1,5 +1,15 @@
-<h2 mat-dialog-title>{{ data.titulo }}</h2>
-<mat-dialog-content>{{ data.mensaje }}</mat-dialog-content>
+<h2 mat-dialog-title>
+  <mat-icon color="warn" style="vertical-align: middle; margin-right: 8px;">warning</mat-icon>
+  {{ data.titulo }}
+</h2>
+
+<mat-dialog-content>
+  <p style="font-weight: bold; color: #d32f2f;">
+    ¡Advertencia!
+  </p>
+  <p>{{ data.mensaje }}</p>
+</mat-dialog-content>
+
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancelar</button>
   <button mat-raised-button color="warn" (click)="onConfirm()">Aceptar</button>

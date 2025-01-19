@@ -37,7 +37,7 @@ export class DialogArticuloComponent implements OnInit {
 
     this.articuloForm = this.fb.group({
       id: [data?.id || null],
-      codigoOrigen: [data?.codigoOrigen || '', Validators.required],
+      codigoOrigen: [data?.codigoOrigen || ''],
       codigoInterno: [data?.codigoInterno || ''],
       nombre: [data?.nombre || '', Validators.required],
       modelo: [data?.modelo || '', Validators.required],

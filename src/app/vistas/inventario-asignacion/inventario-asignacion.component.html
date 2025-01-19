@@ -36,7 +36,8 @@
   <div [ngStyle]="{ flex: 1, overflowX: 'auto', marginTop: '16px' }">
     <p-table [value]="filteredAsignacion" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
       [rowsPerPageOptions]="[5, 10, 20]" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [(selection)]="seleccionados"
-      [style]="{ width: '100%' }" [scrollable]="true">
+      [scrollable]="true"
+      [style]="{ minWidth: '600px', width: '100%' }">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 3em;">
