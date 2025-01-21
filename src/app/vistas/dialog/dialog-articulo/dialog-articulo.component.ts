@@ -26,7 +26,7 @@ export class DialogArticuloComponent implements OnInit {
     'BIENES_SUJETOS_A_CONTROL',
     'EQUIPO_ELECTRONICO'
   ];
-  private codeReader: BrowserMultiFormatReader; // Correcto
+  private codeReader: BrowserMultiFormatReader;
 
   constructor(
     private fb: FormBuilder,
@@ -50,12 +50,37 @@ export class DialogArticuloComponent implements OnInit {
       descripcion: [data?.descripcion || '', Validators.required],
       observacion: [data?.observacion || ''],
       asignarseArticulo: [true],
-    });
+    }); 
   }
 
   ngOnInit(): void {
     if (this.data?.id) {
       this.articuloForm.controls['codigoInterno'].disable();
+      if (this.data?.estado === 'REVISION_TECNICA') {
+        Object.keys(this.articuloForm.controls).forEach((key) => {
+          if (key !== 'estado') {
+            this.articuloForm.controls[key].disable();
+          }
+        });
+      }
+    }
+    this.articuloForm.valueChanges.subscribe((values) => {
+      Object.keys(values).forEach((key) => {
+        if (values[key] === '' || values[key] === null || values[key] === undefined) {
+          this.articuloForm.get(key)?.setValue('S/N', { emitEvent: false });
+        }
+        const control = this.articuloForm.get(key);
+        if (control && typeof values[key] === 'string') {
+          control.setValue(values[key].toUpperCase(), { emitEvent: false });
+        }
+      });
+    });
+  }
+
+  asignarValorPredeterminado(controlName: string): void {
+    const control = this.articuloForm.get(controlName);
+    if (control && (control.value === '' || control.value === null || control.value === undefined)) {
+      control.setValue('S/N', { emitEvent: false });
     }
   }
 
@@ -94,10 +119,19 @@ export class DialogArticuloComponent implements OnInit {
 
 
   onSave() {
-    if (this.articuloForm.valid) {
-      this.dialogRef.close(this.articuloForm.value);
+    if (this.articuloForm.invalid) {
+      Object.keys(this.articuloForm.controls).forEach((key) => {
+        const control = this.articuloForm.get(key);
+        if (control) {
+          control.markAsTouched();
+        }
+      });
+      return;
     }
+  
+    this.dialogRef.close(this.articuloForm.value); 
   }
+  
 
   onCancel() {
     this.dialogRef.close();

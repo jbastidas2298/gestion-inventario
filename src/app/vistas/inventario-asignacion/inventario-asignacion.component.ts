@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsService } from 'src/app/services/items.service';
 import { UserService } from 'src/app/services/user.service';
-import { AsignacionDialogComponent } from '../dialog-asignacion/asignacion-dialog.component';
+import { AsignacionDialogComponent } from '../dialog/dialog-asignacion/asignacion-dialog.component';
 import { NotificationService } from 'src/app/services/Notification.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
-import { DialogConfirmarComponent } from '../dialog-confirmar/dialog-confirmar.component';
+import { DialogConfirmarComponent } from '../dialog/dialog-confirmar/dialog-confirmar.component';
 
 @Component({
   selector: 'app-inventario-asignacion',
@@ -169,18 +169,7 @@ export class InventarioAsignacionComponent implements OnInit {
   }
 
   generarReporteExcel() {
-    this.archivoService.generarReporteExcelAsignaciones().subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'reporte_asignaciones.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      },
-    });
+    
   }
 
   eliminarAsignacion(articuloAsignacion: any) {

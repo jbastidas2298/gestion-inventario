@@ -27,6 +27,19 @@ export class EditarUsuarioDialogComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.usuarioForm.valueChanges.subscribe((values) => {
+      Object.keys(values).forEach((key) => {
+        if (key !== 'contrasena' && key !== 'correo') {
+          const control = this.usuarioForm.get(key);
+          if (control && typeof values[key] === 'string') {
+            control.setValue(values[key].toUpperCase(), { emitEvent: false });
+          }
+        }
+      });
+    });
+  }
+
   guardar(): void {
     if (this.usuarioForm.valid) {
       this.dialogRef.close(this.usuarioForm.value);

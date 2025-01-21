@@ -2,12 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MatTableDataSource } from '@angular/material/table';
-import { EditarUsuarioDialogComponent } from '../dialog-usuario/editar-usuario-dialog.component';
+import { EditarUsuarioDialogComponent } from '../dialog/dialog-usuario/editar-usuario-dialog.component';
 import { Usuario } from 'src/app/dominio/usuario';
 import { UserService } from 'src/app/services/user.service';
 import { PageEvent } from '@angular/material/paginator';
 import { NotificationService } from 'src/app/services/Notification.service';
-import { DialogConfirmarComponent } from '../dialog-confirmar/dialog-confirmar.component';
+import { DialogConfirmarComponent } from '../dialog/dialog-confirmar/dialog-confirmar.component';
 
 @Component({
   selector: 'app-configuracion-usuario',

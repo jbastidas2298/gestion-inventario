@@ -1,9 +1,15 @@
-<p-card class="mat-elevation-z4" [style]="{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '16px' }">
-  <div [style]="{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '16px' }" *ngIf="isAdmin()">
+<p-card class="mat-elevation-z4"
+  [style]="{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '16px' }">
+  <div style="text-align: center; margin-bottom: 16px;">
+      <h2>Ingreso de inventario</h2>
+  </div>
+  <div [style]="{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '16px' }"
+    *ngIf="isAdmin()">
     <button mat-raised-button color="primary" (click)="agregarItem()" [style.flex]="'0 0 auto'">
       <mat-icon>add</mat-icon> Agregar Artículo
     </button>
-    <button mat-raised-button color="accent" (click)="generarCodigosBarra()" [style.flex]="'0 0 auto'" *ngIf="isAdmin()">
+    <button mat-raised-button color="accent" (click)="generarCodigosBarra()" [style.flex]="'0 0 auto'"
+      *ngIf="isAdmin()">
       <mat-icon>qr_code_scanner</mat-icon> Generar Códigos
     </button>
     <button mat-raised-button color="accent" (click)="triggerFileInput()" [style.flex]="'0 0 auto'" *ngIf="isAdmin()">
@@ -20,38 +26,25 @@
       <input matInput (keyup)="aplicarFiltro($event)" placeholder="Escribe aquí para filtrar..." />
     </mat-form-field>
 
-    <button 
-    mat-raised-button 
-    color="primary" 
-    (click)="filtrarPorEstado('DISPONIBLE')" 
-    [ngClass]="{ 'active-button': estadoFiltro === 'DISPONIBLE' }"
-    [style.flex]="'0 0 auto'">
-    <mat-icon>search</mat-icon> Todos
-  </button>
+    <button mat-raised-button color="primary" (click)="filtrarPorEstado('DISPONIBLE')"
+      [ngClass]="{ 'active-button': estadoFiltro === 'DISPONIBLE' }" [style.flex]="'0 0 auto'">
+      <mat-icon>search</mat-icon> Todos
+    </button>
 
-  <button 
-    mat-raised-button 
-    color="warn" 
-    (click)="filtrarPorEstado('DADO_BAJA')" 
-    [ngClass]="{ 'active-button': estadoFiltro === 'DADO_BAJA' }"
-    [style.flex]="'0 0 auto'">
-    <mat-icon>remove_circle</mat-icon> Dados de Baja
-  </button>
-
-  <button 
-    mat-raised-button 
-    color="primary" 
-    (click)="filtrarPorEstado('REVISION_TECNICA')" 
-    [ngClass]="{ 'active-button': estadoFiltro === 'REVISION_TECNICA' }"
-    [style.flex]="'0 0 auto'">
-    <mat-icon>build</mat-icon> Servicio Técnico
-  </button>
+    <button mat-raised-button color="primary" (click)="filtrarPorEstado('REVISION_TECNICA')"
+      [ngClass]="{ 'active-button': estadoFiltro === 'REVISION_TECNICA' }" [style.flex]="'0 0 auto'">
+      <mat-icon>build</mat-icon> Servicio Técnico
+    </button>
+    <button mat-raised-button color="warn" (click)="filtrarPorEstado('DADO_BAJA')"
+      [ngClass]="{ 'active-button': estadoFiltro === 'DADO_BAJA' }" [style.flex]="'0 0 auto'">
+      <mat-icon>remove_circle</mat-icon> Dados de Baja
+    </button>
   </div>
 
   <div [style]="{ flex: 1, overflowX: 'auto', marginTop: '16px' }">
     <p-table [value]="filteredArticulos" [paginator]="true" [rows]="pageSize" [totalRecords]="totalElements"
       [rowsPerPageOptions]="[10, 20, 50]" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [(selection)]="selectedRows"
-      [scrollable]="true" [responsiveLayout]="'scroll'" 
+      [scrollable]="true" [responsiveLayout]="'scroll'"
       [currentPageReportTemplate]="'Mostrando desde {first} al {last} de {totalRecords} registros'"
       [style]="{ minWidth: '600px', width: '100%' }">
       <ng-template pTemplate="header">
@@ -82,7 +75,8 @@
           <td>{{ articulo.nombre }}</td>
           <td>
             <div [ngStyle]="{ display: 'flex', gap: '8px' }">
-              <button mat-icon-button color="primary" *ngIf="isAdmin()" (click)="editarItem(articulo)">
+              <button mat-icon-button color="primary" *ngIf="isAdmin()" (click)="editarItem(articulo)"
+                [disabled]="articulo.estado==='DADO_BAJA'">
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-icon-button color="warn" *ngIf="isAdmin()" (click)="eliminarItem(articulo.id)">
@@ -104,7 +98,3 @@
     </p-table>
   </div>
 </p-card>
-<br/>
-<br/>
-<br/>
-<br/>

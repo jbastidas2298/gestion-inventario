@@ -7,9 +7,15 @@
     </div>
 
     <div class="dashboard-item" *ngIf="isAdmin()"  (click)="navigateTo('inventario-asignacion')">
-      <mat-icon class="dashboard-icon">article</mat-icon>
+      <mat-icon class="dashboard-icon">task</mat-icon>
       <h3>Asignación</h3>
       <p>Inventario/Usuarios</p>
+    </div>
+
+    <div class="dashboard-item" *ngIf="isAdmin()"  (click)="navigateTo('inventario-reportes')">
+      <mat-icon class="dashboard-icon">description</mat-icon>
+      <h3>Reportes</h3>
+      <p>Reportes</p>
     </div>
   </div>
 </div>

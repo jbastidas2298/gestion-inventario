@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{ data?.id ? 'Editar Artículo' : 'Agregar Artículo' }}</h2>
+<h2 mat-dialog-title>{{ data?.id ? 'Editar artículo' : 'Agregar artículo' }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="articuloForm" style="display: grid; gap: 16px;">
@@ -30,27 +30,27 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Marca</mat-label>
-      <input matInput formControlName="marca" />
+      <input matInput formControlName="marca" (blur)="asignarValorPredeterminado('marca')"/>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Serie</mat-label>
-      <input matInput formControlName="serie" />
+      <input matInput formControlName="serie" (blur)="asignarValorPredeterminado('serie')"/>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Modelo</mat-label>
-      <input matInput formControlName="modelo" />
+      <input matInput formControlName="modelo" (blur)="asignarValorPredeterminado('modelo')"/>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Ubicación Edificio</mat-label>
-      <input matInput formControlName="ubicacion" />
+      <input matInput formControlName="ubicacion" (blur)="asignarValorPredeterminado('ubicacion')"/>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Sección</mat-label>
-      <input matInput formControlName="seccion" />
+      <input matInput formControlName="seccion" (blur)="asignarValorPredeterminado('seccion')"/>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -69,12 +69,12 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Descripción</mat-label>
-      <textarea matInput formControlName="descripcion"></textarea>
+      <textarea matInput formControlName="descripcion" (blur)="asignarValorPredeterminado('descripcion')"></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Observación</mat-label>
-      <textarea matInput formControlName="observacion"></textarea>
+      <textarea matInput formControlName="observacion" (blur)="asignarValorPredeterminado('observacion')"></textarea>
     </mat-form-field>
 
     <mat-checkbox formControlName="asignarseArticulo" *ngIf="!data?.id">Asignarse Artículo</mat-checkbox>

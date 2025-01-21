@@ -1,0 +1,67 @@
+<p-card class="mat-elevation-z4" [style]="{ padding: '16px' }">
+  <div style="text-align: center; margin-bottom: 16px;">
+    <h2>Reportes</h2>
+  </div>
+
+  <mat-tab-group mat-align-tabs="center" [(selectedIndex)]="tabIndex">
+    <mat-tab label="Asignaciones">
+      <div style="padding: 16px;">
+        <h3>Reporte de asignaciones</h3>
+        <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+          <mat-label>Tipo de Reporte</mat-label>
+          <mat-select [(value)]="tipoAsignacion">
+            <mat-option value="completo" (onSelectionChange)="onTipoAsignacionChange()">Completo</mat-option>
+            <mat-option value="usuario" (onSelectionChange)="onTipoAsignacionChange()">Por Usuario</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="tipoAsignacion === 'usuario'" appearance="fill" style="width: 100%; margin-top: 16px;">
+          <mat-label>Seleccionar Usuario</mat-label>
+          <input type="text" matInput [formControl]="usuarioFiltro" [matAutocomplete]="auto"
+            placeholder="Escribe para buscar..." />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario"
+              (onSelectionChange)="onUsuarioSeleccionado(usuario)">
+              {{ usuario.nombre }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="generarReporteAsignaciones()">
+          <img src="assets/excel.png" alt="Excel" style="width: 20px; height: 20px; margin-right: 8px;" />
+          Generar Reporte
+        </button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Estados">
+      <div style="padding: 16px;">
+        <h3>Reporte de por estados</h3>
+        <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+          <mat-label>Seleccionar Estado</mat-label>
+          <mat-select [(value)]="estadoSeleccionado">
+            <mat-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+          <mat-label>Desde</mat-label>
+          <input matInput [matDatepicker]="fechaInicioPicker" [(ngModel)]="fechaInicio" />
+          <mat-datepicker-toggle matSuffix [for]="fechaInicioPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fechaInicioPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
+          <mat-label>Hasta</mat-label>
+          <input matInput [matDatepicker]="fechaFinPicker" [(ngModel)]="fechaFin" />
+          <mat-datepicker-toggle matSuffix [for]="fechaFinPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fechaFinPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button color="accent" (click)="generarReporteEstados()">
+          Generar Reporte
+        </button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</p-card>

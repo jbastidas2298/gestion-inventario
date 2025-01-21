@@ -3,15 +3,13 @@
 </h1>
 
 <div mat-dialog-content>
-  <!-- Campo para el artículo (solo si es una edición de asignación) -->
   <div *ngIf="articuloSeleccionado">
     <mat-form-field appearance="fill">
       <mat-label>Artículo</mat-label>
-      <input matInput [value]="articuloSeleccionado.codigoInterno + ' - ' + articuloSeleccionado.codigoOrigen" readonly />
+      <input matInput [value]="articuloSeleccionado.codigoInterno + ' - ' + articuloSeleccionado.nombreArticulo" readonly />
     </mat-form-field>
   </div>
 
-  <!-- Selector del usuario actual (solo para reasignación) -->
   <div *ngIf="isReassigning">
     <mat-form-field appearance="fill">
       <mat-label>Usuario Actual</mat-label>
@@ -32,7 +30,6 @@
     </mat-select>
   </mat-form-field>
 
-  <!-- Campo para el motivo (solo para reasignación) -->
   <div *ngIf="isReassigning">
     <mat-form-field appearance="fill">
       <mat-label>Motivo</mat-label>

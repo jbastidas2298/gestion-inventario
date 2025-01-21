@@ -1,14 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemsService } from 'src/app/services/items.service';
-import { DialogArticuloComponent } from '../dialog-articulo/dialog-articulo.component';
-import { DialogImagenComponent } from '../dialog-imagen/dialog-imagen.component';
+import { DialogArticuloComponent } from '../dialog/dialog-articulo/dialog-articulo.component';
+import { DialogImagenComponent } from '../dialog/dialog-imagen/dialog-imagen.component';
 import { NotificationService } from 'src/app/services/Notification.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
 import { PageEvent } from '@angular/material/paginator';
-import { DialogConfirmarComponent } from '../dialog-confirmar/dialog-confirmar.component';
+import { DialogConfirmarComponent } from '../dialog/dialog-confirmar/dialog-confirmar.component';
 
 @Component({
   selector: 'app-inventario-articulo',

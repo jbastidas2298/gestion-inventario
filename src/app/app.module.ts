@@ -20,20 +20,20 @@ import { InicioComponent } from './vistas/inicio/inicio.component';
 import { MatIconModule } from '@angular/material/icon';
 import { BarraComponent } from './general/barra/barra.component';
 import { ConfiguracionMenuComponent } from './vistas/configuracion-menu/configuracion-menu.component';
-import { EditarUsuarioDialogComponent } from './vistas/dialog-usuario/editar-usuario-dialog.component';
+import { EditarUsuarioDialogComponent } from './vistas/dialog/dialog-usuario/editar-usuario-dialog.component';
 import { ConfiguracionUsuarioComponent } from './vistas/configuracion-usuario/configuracion-usuario.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ConfiguracionAreasComponent } from './vistas/configuracion-areas/configuracion-areas.component';
-import { AreaDialogComponent } from './vistas/dialog-area/area-dialog.component';
+import { AreaDialogComponent } from './vistas/dialog/dialog-area/area-dialog.component';
 import { InventarioMenuComponent } from './vistas/inventario-menu/inventario-menu.component';
-import { DialogArticuloComponent } from './vistas/dialog-articulo/dialog-articulo.component';
+import { DialogArticuloComponent } from './vistas/dialog/dialog-articulo/dialog-articulo.component';
 import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
-import { DialogImagenComponent } from './vistas/dialog-imagen/dialog-imagen.component';
+import { DialogImagenComponent } from './vistas/dialog/dialog-imagen/dialog-imagen.component';
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
 import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
-import { AsignacionDialogComponent } from './vistas/dialog-asignacion/asignacion-dialog.component';
+import { AsignacionDialogComponent } from './vistas/dialog/dialog-asignacion/asignacion-dialog.component';
 import { Interceptor } from './services/interceptor.service';
 import { LoadingComponent } from './general/loading/loading.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -45,10 +45,17 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
 import { AccordionModule } from 'primeng/accordion';
 import { FileUploadModule } from 'primeng/fileupload';
-import { DialogConfirmarComponent } from './vistas/dialog-confirmar/dialog-confirmar.component';
+import { DialogConfirmarComponent } from './vistas/dialog/dialog-confirmar/dialog-confirmar.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { DialogPdfComponent } from './vistas/dialog-pdf/dialog-pdf.component';
+import { DialogPdfComponent } from './vistas/dialog/dialog-pdf/dialog-pdf.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { InventarioReportesComponent } from './vistas/inventario-reportes/inventario-reportes.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,6 +77,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     LoadingComponent,
     DialogConfirmarComponent,
     DialogPdfComponent,
+    InventarioReportesComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,7 +110,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
     AccordionModule,
     FileUploadModule,
     MatDividerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDatepickerModule,
+    MatRadioModule,
+    MatNativeDateModule,
+    MatTabsModule,
+    MatAutocompleteModule,
   ],
   providers: [
     {

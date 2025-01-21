@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { AreaDialogComponent } from '../dialog-area/area-dialog.component';
+import { AreaDialogComponent } from '../dialog/dialog-area/area-dialog.component';
 import { Area } from 'src/app/dominio/area';
 import { Usuario } from 'src/app/dominio/usuario';
 import { AreaService } from 'src/app/services/area.service';

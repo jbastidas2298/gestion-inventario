@@ -9,6 +9,7 @@ import { InventarioMenuComponent } from './vistas/inventario-menu/inventario-men
 import { InventarioArticuloComponent } from './vistas/inventario-articulo/inventario-articulo.component';
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
 import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
+import { InventarioReportesComponent } from './vistas/inventario-reportes/inventario-reportes.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/in
     { path: 'items', component: InventarioArticuloComponent },
     { path: 'inventario-detalle/:id', component: InventarioDetalleComponent },
     { path: 'inventario-asignacion', component: InventarioAsignacionComponent },
+    { path: 'inventario-reportes', component: InventarioReportesComponent },
   
   ], {scrollPositionRestoration: 'enabled'})
 ],

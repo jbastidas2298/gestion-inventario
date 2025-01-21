@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemsService } from 'src/app/services/items.service';
-import { DialogPdfComponent } from '../dialog-pdf/dialog-pdf.component';
+import { DialogPdfComponent } from '../dialog/dialog-pdf/dialog-pdf.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/Notification.service';
 import { UserService } from 'src/app/services/user.service';
