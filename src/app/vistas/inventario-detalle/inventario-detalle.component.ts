@@ -99,7 +99,7 @@ export class InventarioDetalleComponent implements OnInit {
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'reporte.pdf';
+        a.download = 'Reporte_'+this.articulo.articulo.codigoInterno+'.pdf';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

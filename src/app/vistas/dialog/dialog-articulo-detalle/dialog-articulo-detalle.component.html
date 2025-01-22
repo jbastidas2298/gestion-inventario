@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Detalle del Artículo</h2>
+<mat-dialog-content>
+  <div>
+    <p><strong>Asignado a:</strong> {{ data.nombreAsignado }}</p>
+    <p><strong>Nombre Artículo:</strong> {{ data.nombreArticulo }}</p>
+    <p><strong>Código Interno:</strong> {{ data.codigoInterno }}</p>
+    <p><strong>Código Origen:</strong> {{ data.codigoOrigen }}</p>
+    <p><strong>Estado:</strong> {{ data.estadoArticulo }}</p>
+    <p><strong>Marca:</strong> {{ data.marcaArticulo }}</p>
+    <p><strong>Modelo:</strong> {{ data.modeloArticulo }}</p>
+    <p><strong>Serie:</strong> {{ data.serieArticulo }}</p>
+    <p><strong>Ubicación:</strong> {{ data.ubicacionArticulo }}</p>
+    <p><strong>Sección:</strong> {{ data.seccionArticulo }}</p>
+    <p><strong>Grupo Activo:</strong> {{ data.grupoActivo }}</p>
+    <p><strong>Descripción:</strong> {{ data.descripcion }}</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

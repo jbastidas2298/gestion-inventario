@@ -40,10 +40,10 @@
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 3em;">
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
           <th>Articulo</th>
           <th>Cod. Origen</th>
+          <th>Estado</th>
           <th>Usuario/Área</th>
           <th>Fecha Asignación</th>
           <th>Acciones</th>
@@ -53,17 +53,18 @@
       <ng-template pTemplate="body" let-articuloAsignacion>
         <tr>
           <td>
-            <p-tableCheckbox [value]="articuloAsignacion"></p-tableCheckbox>
+            <p-tableCheckbox [value]="articuloAsignacion" [disabled]="articuloAsignacion.estadoArticulo === 'DADO_BAJA' || articuloAsignacion.estadoArticulo === 'REVISION_TECNICA'"></p-tableCheckbox>
           </td>
           <td>{{ articuloAsignacion.nombreArticulo }}</td>
           <td>{{ articuloAsignacion.codigoOrigen }}</td>
+          <td>{{ articuloAsignacion.estadoArticulo }}</td>
           <td>{{ articuloAsignacion.nombreAsignado }}</td>
           <td>{{ articuloAsignacion.fechaAsignacion }}</td>
           <td>
-            <button mat-icon-button color="primary" (click)="editarAsignacion(articuloAsignacion)">
+            <button mat-icon-button color="primary" (click)="editarAsignacion(articuloAsignacion)" [disabled]="articuloAsignacion.estadoArticulo === 'DADO_BAJA' || articuloAsignacion.estadoArticulo === 'REVISION_TECNICA'">
               <mat-icon>assignment</mat-icon>
             </button>
-            <button mat-icon-button color="accent" (click)="generarReporteActaEntrega(articuloAsignacion)" [disabled]="!articuloAsignacion.idUsuario">
+            <button mat-icon-button color="accent" (click)="generarReporteActaEntrega(articuloAsignacion)" [disabled]="!articuloAsignacion.idUsuario || articuloAsignacion.estadoArticulo === 'DADO_BAJA' || articuloAsignacion.estadoArticulo === 'REVISION_TECNICA'">
               <mat-icon>download</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="eliminarAsignacion(articuloAsignacion)" [disabled]="!articuloAsignacion.idUsuario">

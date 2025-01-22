@@ -9,6 +9,9 @@ import { UserService } from 'src/app/services/user.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
 import { PageEvent } from '@angular/material/paginator';
 import { DialogConfirmarComponent } from '../dialog/dialog-confirmar/dialog-confirmar.component';
+import { BrowserMultiFormatReader } from '@zxing/library';
+import { DialogEscanerComponent } from '../dialog/dialog-escaner/dialog-escaner.component';
+import { DialogArticuloDetalleComponent } from '../dialog/dialog-articulo-detalle/dialog-articulo-detalle.component';
 
 @Component({
   selector: 'app-inventario-articulo',
@@ -17,6 +20,7 @@ import { DialogConfirmarComponent } from '../dialog/dialog-confirmar/dialog-conf
 })
 export class InventarioArticuloComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('video', { static: false }) videoElement!: ElementRef;
   articulos: any[] = [];
   filteredArticulos: any[] = [];
   selectedRows: Set<number> = new Set();
@@ -26,14 +30,16 @@ export class InventarioArticuloComponent implements OnInit {
   pageIndex = 0;
   delayTimer: any; 
   estadoFiltro: string = 'DISPONIBLE'; 
+  
   constructor(
     private dialog: MatDialog,
     private itemsService: ItemsService,
     private notificationService: NotificationService,
     private router: Router,
     private userService: UserService,
-    private archivoService: ArchivoService
-  ) { }
+    private archivoService: ArchivoService,
+  ) {  }
+  
 
   ngOnInit() {
     this.cargarArticulos();
@@ -204,4 +210,35 @@ export class InventarioArticuloComponent implements OnInit {
     });
   }
 
+  filtrarPorTab(index: number): void {
+    const estados = ['DISPONIBLE', 'REVISION_TECNICA', 'DADO_BAJA'];
+    if (index >= 0 && index < estados.length) {
+      this.filtrarPorEstado(estados[index]);
+    }
+  }
+
+  activarEscaner() {
+    const dialogRef = this.dialog.open(DialogEscanerComponent, {
+      width: '500px', 
+      height: 'auto', 
+      maxWidth: '90vw', 
+      maxHeight: '90vh', 
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.consultararticuloCodigo(result);
+      }
+    });
+  }
+
+  consultararticuloCodigo(codigo: string) {
+    this.itemsService.obtenerItemCodigo(codigo).subscribe((data: any) => {
+      this.dialog.open(DialogArticuloDetalleComponent, {
+        width: '400px',
+        data: data, 
+      });
+    });
+  }
 }

@@ -55,7 +55,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { DialogEscanerComponent } from './vistas/dialog/dialog-escaner/dialog-escaner.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DialogArticuloDetalleComponent } from './vistas/dialog/dialog-articulo-detalle/dialog-articulo-detalle.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,6 +80,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     DialogConfirmarComponent,
     DialogPdfComponent,
     InventarioReportesComponent,
+    DialogEscanerComponent,
+    DialogArticuloDetalleComponent
   ],
   imports: [
     BrowserModule,
@@ -116,6 +120,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatNativeDateModule,
     MatTabsModule,
     MatAutocompleteModule,
+    MatTooltipModule
   ],
   providers: [
     {

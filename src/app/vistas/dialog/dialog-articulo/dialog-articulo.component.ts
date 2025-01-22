@@ -1,7 +1,8 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
+import { DialogEscanerComponent } from '../dialog-escaner/dialog-escaner.component';
 
 @Component({
   selector: 'app-dialog-articulo',
@@ -31,7 +32,8 @@ export class DialogArticuloComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogArticuloComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialog: MatDialog,
   ) {
     this.codeReader = new BrowserMultiFormatReader();
 
@@ -50,7 +52,7 @@ export class DialogArticuloComponent implements OnInit {
       descripcion: [data?.descripcion || '', Validators.required],
       observacion: [data?.observacion || ''],
       asignarseArticulo: [true],
-    }); 
+    });
   }
 
   ngOnInit(): void {
@@ -84,37 +86,20 @@ export class DialogArticuloComponent implements OnInit {
     }
   }
 
-  activarEscaner(): void {
-    if (this.scannerActive) {
-      return; 
-    }
-  
-    this.mostrarEscaner = true;
-    this.scannerActive = true;
-  
-    setTimeout(() => {
-      if (this.videoElement && this.videoElement.nativeElement) {
-        this.codeReader.decodeFromVideoDevice(
-          null,
-          this.videoElement.nativeElement,
-          (result, err) => {
-            if (result) {
-              this.articuloForm.controls['codigoOrigen'].setValue(result.getText());
-              this.desactivarEscaner();
-            }
-          }
-        );
-      }
-    }, 100);
-  }
-  
+  activarEscaner() {
+    const dialogRef = this.dialog.open(DialogEscanerComponent, {
+      width: '500px',
+      height: 'auto',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      disableClose: false,
+    });
 
-  desactivarEscaner(): void {
-    if (this.scannerActive) {
-      this.codeReader.reset();
-      this.scannerActive = false;
-      this.mostrarEscaner = false;
-    }
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.articuloForm.controls['codigoOrigen'].setValue(result);
+      }
+    });
   }
 
 
@@ -128,13 +113,13 @@ export class DialogArticuloComponent implements OnInit {
       });
       return;
     }
-  
-    this.dialogRef.close(this.articuloForm.value); 
+
+    this.dialogRef.close(this.articuloForm.value);
   }
-  
+
 
   onCancel() {
     this.dialogRef.close();
-    this.desactivarEscaner();
   }
+  
 }

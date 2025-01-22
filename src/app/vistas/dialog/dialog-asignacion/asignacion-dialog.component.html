@@ -6,28 +6,38 @@
   <div *ngIf="articuloSeleccionado">
     <mat-form-field appearance="fill">
       <mat-label>Artículo</mat-label>
-      <input matInput [value]="articuloSeleccionado.codigoInterno + ' - ' + articuloSeleccionado.nombreArticulo" readonly />
+      <input matInput [value]="articuloSeleccionado.codigoInterno + ' - ' + articuloSeleccionado.nombreArticulo"
+        readonly />
     </mat-form-field>
   </div>
 
   <div *ngIf="isReassigning">
     <mat-form-field appearance="fill">
       <mat-label>Usuario Actual</mat-label>
-      <mat-select [(ngModel)]="usuarioActual">
-        <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario">
+      <input
+        type="text"
+        matInput
+        [matAutocomplete]="autoUsuarioActual"
+        [(ngModel)]="usuarioFiltroActual"
+        (ngModelChange)="filtrarUsuariosActuales()"
+      />
+      <mat-autocomplete #autoUsuarioActual="matAutocomplete" (optionSelected)="seleccionarUsuarioActual($event)">
+        <mat-option *ngFor="let usuario of usuariosFiltradosActuales" [value]="usuario.nombre">
           {{ usuario.nombre }}
         </mat-option>
-      </mat-select>
+      </mat-autocomplete>
     </mat-form-field>
   </div>
 
   <mat-form-field appearance="fill">
     <mat-label>{{ isReassigning ? 'Nuevo Usuario/Área' : 'Asignar Usuario' }}</mat-label>
-    <mat-select [(ngModel)]="usuarioSeleccionado">
-      <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario">
+    <input type="text" matInput [matAutocomplete]="autoUsuarioSeleccionado" [(ngModel)]="usuarioFiltro"
+      (ngModelChange)="filtrarUsuarios()" />
+    <mat-autocomplete #autoUsuarioSeleccionado="matAutocomplete" (optionSelected)="seleccionarUsuario($event)">
+      <mat-option *ngFor="let usuario of usuariosFiltrados" [value]="usuario.nombre">
         {{ usuario.nombre }}
       </mat-option>
-    </mat-select>
+    </mat-autocomplete>
   </mat-form-field>
 
   <div *ngIf="isReassigning">

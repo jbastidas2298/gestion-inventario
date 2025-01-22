@@ -1,13 +1,12 @@
 <p-card class="mat-elevation-z4">
-  <div>
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-      <h2>Detalle del Artículo</h2>
-    </div>
-    <mat-divider></mat-divider>
+  <div style="margin-bottom: 16px; text-align: center;">
+    <h2 style="margin: 0; font-size: 24px; font-weight: bold;">Detalle del Artículo</h2>
   </div>
+  <mat-divider></mat-divider>
+
 
   <div>
-    <h3>Información del Artículo</h3>
+    <h3 style="margin-bottom: 8px; font-size: 20px; color: #1976d2;">Información del Artículo</h3>
     <img [src]="qrCodeUrl" alt="Código QR" *ngIf="qrCodeUrl" style="max-width: 150px; max-height: 200px" />
     <p><strong>{{ articulo?.articulo?.codigoInterno }}</strong> </p>
     <p><strong>Nombre:</strong> {{ articulo?.articulo?.nombre }}</p>
@@ -21,14 +20,14 @@
   </div>
 
   <div>
-    <h3>Usuario Asignado</h3>
+    <h3 style="margin-bottom: 8px; font-size: 20px; color: #1976d2;">Asignado</h3>
     <p><strong>Nombre:</strong> {{ articulo?.usuarioAsignado?.nombreCompleto }}</p>
     <p><strong>Correo:</strong> {{ articulo?.usuarioAsignado?.correo }}</p>
     <mat-divider></mat-divider>
   </div>
 
   <div>
-    <h3>Historial</h3>
+    <h3 style="margin-bottom: 8px; font-size: 20px; color: #1976d2;">Historial</h3>
     <ul>
       <li *ngFor="let history of articulo?.historial">
         <strong>{{ history.tipoOperacion }}:</strong> {{ history.descripcion }}
@@ -38,7 +37,7 @@
   </div>
 
   <div>
-    <h3>Archivos</h3>
+    <h3 style="margin-bottom: 8px; font-size: 20px; color: #1976d2;">Archivos</h3>
     <p-table [value]="articulo?.archivos" styleClass="p-datatable-gridlines" [rows]="5" [paginator]="true">
       <ng-template pTemplate="header">
         <tr>

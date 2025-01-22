@@ -22,6 +22,7 @@ export class InventarioAsignacionComponent implements OnInit {
   pageSize: number = 10;
   totalRecords: number = 0;
   filtroUsuario: string = '';
+  hasDisabledItems: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -34,6 +35,8 @@ export class InventarioAsignacionComponent implements OnInit {
   ngOnInit() {
     this.cargarUsuariosAreas();
     this.cargarAsignaciones();
+    this.hasDisabledItems = this.filteredAsignacion.some(item => item.estadoArticulo === 'DADO_BAJA' || item.estadoArticulo === 'REVISION_TECNICA');
+
   }
 
   cargarAsignaciones(page: number = 0, size: number = 10, filter: string = '', filter_usuario: string = '') {
@@ -190,7 +193,8 @@ export class InventarioAsignacionComponent implements OnInit {
         });
       }
     });
-
   }
+
+  
 
 }

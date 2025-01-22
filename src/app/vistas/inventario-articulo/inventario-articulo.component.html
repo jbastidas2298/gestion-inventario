@@ -1,7 +1,7 @@
 <p-card class="mat-elevation-z4"
   [style]="{ height: '100vh', display: 'flex', flexDirection: 'column', padding: '16px' }">
   <div style="text-align: center; margin-bottom: 16px;">
-      <h2>Ingreso de inventario</h2>
+    <h2>Ingreso de inventario</h2>
   </div>
   <div [style]="{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '16px' }"
     *ngIf="isAdmin()">
@@ -19,27 +19,31 @@
     <input type="file" accept=".xlsx, .xls" #fileInput (change)="importarExcel($event)" hidden />
   </div>
 
-  <div [ngStyle]="{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', marginBottom: '16px' }">
+  <div [style]="{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', marginBottom: '16px' }">
     <mat-form-field appearance="outline" [style.flex]="'1 1 100%'" [style.maxWidth.px]="400">
       <mat-icon matPrefix>search</mat-icon>
       <mat-label>Buscar artículos</mat-label>
       <input matInput (keyup)="aplicarFiltro($event)" placeholder="Escribe aquí para filtrar..." />
     </mat-form-field>
+  </div>
 
-    <button mat-raised-button color="primary" (click)="filtrarPorEstado('DISPONIBLE')"
-      [ngClass]="{ 'active-button': estadoFiltro === 'DISPONIBLE' }" [style.flex]="'0 0 auto'">
-      <mat-icon>search</mat-icon> Todos
-    </button>
-
-    <button mat-raised-button color="primary" (click)="filtrarPorEstado('REVISION_TECNICA')"
-      [ngClass]="{ 'active-button': estadoFiltro === 'REVISION_TECNICA' }" [style.flex]="'0 0 auto'">
-      <mat-icon>build</mat-icon> Servicio Técnico
-    </button>
-    <button mat-raised-button color="warn" (click)="filtrarPorEstado('DADO_BAJA')"
-      [ngClass]="{ 'active-button': estadoFiltro === 'DADO_BAJA' }" [style.flex]="'0 0 auto'">
-      <mat-icon>remove_circle</mat-icon> Dados de Baja
+  <div style="display: flex; align-items: center; gap: 16px;" *ngIf="isAdmin()">
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="activarEscaner()" 
+      matTooltip="Buscar artículo por código de barra" 
+      matTooltipPosition="above">
+      <mat-icon>qr_code_scanner</mat-icon>
     </button>
   </div>
+  
+
+  <mat-tab-group (selectedIndexChange)="filtrarPorTab($event)">
+    <mat-tab label="Todos"></mat-tab>
+    <mat-tab label="Servicio Técnico"></mat-tab>
+    <mat-tab label="Dados de Baja"></mat-tab>
+  </mat-tab-group>
 
   <div [style]="{ flex: 1, overflowX: 'auto', marginTop: '16px' }">
     <p-table [value]="filteredArticulos" [paginator]="true" [rows]="pageSize" [totalRecords]="totalElements"
@@ -74,7 +78,7 @@
           <td>{{ articulo.codigoInterno }}</td>
           <td>{{ articulo.nombre }}</td>
           <td>
-            <div [ngStyle]="{ display: 'flex', gap: '8px' }">
+            <div [style]="{ display: 'flex', gap: '8px' }">
               <button mat-icon-button color="primary" *ngIf="isAdmin()" (click)="editarItem(articulo)"
                 [disabled]="articulo.estado==='DADO_BAJA'">
                 <mat-icon>edit</mat-icon>

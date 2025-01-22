@@ -11,14 +11,21 @@ export class AsignacionDialogComponent {
   usuarioSeleccionado: any | null = null;
   usuarioActual: any | null = null;
   motivo: string = '';
+
   usuariosFiltrados: any[] = [];
+  usuariosFiltradosActuales: any[] = [];
+
+  usuarioFiltro: string = '';
+  usuarioFiltroActual: string = '';
+
   isReassigning: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AsignacionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { articuloActual: any | null; usuariosAreas: any[]; isReassigning: boolean }
   ) {
-    this.usuariosFiltrados = data.usuariosAreas;
+    this.usuariosFiltrados = [...data.usuariosAreas];
+    this.usuariosFiltradosActuales = [...data.usuariosAreas];
     this.isReassigning = data.isReassigning;
 
     if (data.articuloActual) {
@@ -29,6 +36,32 @@ export class AsignacionDialogComponent {
           usuario.tipoRelacion === this.articuloSeleccionado.tipoRelacion
       );
     }
+  }
+
+  filtrarUsuarios(): void {
+    const filtro = this.usuarioFiltro.toLowerCase();
+    this.usuariosFiltrados = this.data.usuariosAreas.filter((usuario) =>
+      usuario.nombre.toLowerCase().includes(filtro)
+    );
+  }
+
+  filtrarUsuariosActuales(): void {
+    const filtro = this.usuarioFiltroActual.toLowerCase();
+    this.usuariosFiltradosActuales = this.data.usuariosAreas.filter((usuario) =>
+      usuario.nombre.toLowerCase().includes(filtro)
+    );
+  }
+  
+  seleccionarUsuarioActual(event: any): void {
+    this.usuarioActual = this.data.usuariosAreas.find(
+      (usuario) => usuario.nombre === event.option.value
+    );
+  }
+
+  seleccionarUsuario(event: any): void {
+    this.usuarioSeleccionado = this.data.usuariosAreas.find(
+      (usuario) => usuario.nombre === event.option.value
+    );
   }
 
   onSave(): void {

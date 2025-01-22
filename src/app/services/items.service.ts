@@ -82,4 +82,8 @@ export class ItemsService {
   obtenerItemsBaja(){
     return this.http.get(`${this.apiUrl}/baja`);
   }
+
+  obtenerItemCodigo(codigo: string){
+    return this.http.get(`${this.apiUrl}/codigo/${codigo}`);
+  }
 }

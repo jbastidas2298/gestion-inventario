@@ -5,17 +5,12 @@
     <div style="display: flex; align-items: center; gap: 16px;">
       <mat-form-field appearance="fill" style="flex: 1;">
         <mat-label>Código Origen</mat-label>
-        <input matInput formControlName="codigoOrigen" [readonly]="mostrarEscaner" placeholder="Escanea o ingresa el código" />
+        <input matInput formControlName="codigoOrigen" [readonly]="mostrarEscaner" />
       </mat-form-field>
       <button mat-raised-button color="primary" *ngIf="!data?.id" (click)="activarEscaner()">
         <mat-icon>qr_code_scanner</mat-icon>
         Escanear
       </button>
-    </div>
-
-    <div *ngIf="mostrarEscaner" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
-      <video #video autoplay style="width: 100%; max-width: 480px;"></video>
-      <button mat-raised-button color="warn" (click)="desactivarEscaner()">Cerrar Escáner</button>
     </div>
 
     <mat-form-field appearance="fill" *ngIf="data?.id">
