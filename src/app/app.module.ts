@@ -58,6 +58,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { DialogEscanerComponent } from './vistas/dialog/dialog-escaner/dialog-escaner.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogArticuloDetalleComponent } from './vistas/dialog/dialog-articulo-detalle/dialog-articulo-detalle.component';
+import { RestablecerPasswordComponent } from './vistas/restablecer-password/restablecer-password.component';
+import { RestablecerContrasenaIngresoComponent } from './vistas/restablecer-contrasena-ingreso/restablecer-contrasena-ingreso.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,7 +83,9 @@ import { DialogArticuloDetalleComponent } from './vistas/dialog/dialog-articulo-
     DialogPdfComponent,
     InventarioReportesComponent,
     DialogEscanerComponent,
-    DialogArticuloDetalleComponent
+    DialogArticuloDetalleComponent,
+    RestablecerPasswordComponent,
+    RestablecerContrasenaIngresoComponent
   ],
   imports: [
     BrowserModule,

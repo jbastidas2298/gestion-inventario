@@ -20,6 +20,9 @@ export class BarraComponent {
 
   obtenerNombreUsuario() {
     const usernameLocal = this.userService.getUsername(); 
+    if (!usernameLocal) {
+      return; 
+    }
     this.userService.getNombreCompleto(usernameLocal).subscribe({
       next: (response: any) => { 
         this.username = response?.nombreCompleto ? response.nombreCompleto : usernameLocal; 

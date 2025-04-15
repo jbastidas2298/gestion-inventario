@@ -51,4 +51,8 @@ export class LoginComponent {
       });
     }
   }
+
+  onForgotPassword() {
+    this.router.navigate(['/restablecer-password']);
+  }
 }  

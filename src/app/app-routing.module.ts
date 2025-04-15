@@ -10,6 +10,8 @@ import { InventarioArticuloComponent } from './vistas/inventario-articulo/invent
 import { InventarioDetalleComponent } from './vistas/inventario-detalle/inventario-detalle.component';
 import { InventarioAsignacionComponent } from './vistas/inventario-asignacion/inventario-asignacion.component';
 import { InventarioReportesComponent } from './vistas/inventario-reportes/inventario-reportes.component';
+import { RestablecerPasswordComponent } from './vistas/restablecer-password/restablecer-password.component';
+import { RestablecerContrasenaIngresoComponent } from './vistas/restablecer-contrasena-ingreso/restablecer-contrasena-ingreso.component';
 
 
 @NgModule({
@@ -25,6 +27,9 @@ import { InventarioReportesComponent } from './vistas/inventario-reportes/invent
     { path: 'inventario-detalle/:id', component: InventarioDetalleComponent },
     { path: 'inventario-asignacion', component: InventarioAsignacionComponent },
     { path: 'inventario-reportes', component: InventarioReportesComponent },
+    { path: 'restablecer-password', component: RestablecerPasswordComponent },
+    { path: 'restablecerContrasena/:token', component: RestablecerContrasenaIngresoComponent },
+
   
   ], {scrollPositionRestoration: 'enabled'})
 ],

@@ -1,0 +1,49 @@
+<div class="reset-container">
+  <div class="p-col-10 p-md-6 p-lg-4">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <div class="p-d-flex p-ai-center p-jc-center">
+            <h1>Restablecer Contraseña</h1>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="p-fluid">
+            <mat-label>Nueva Contraseña</mat-label>
+            <input matInput formControlName="nuevaContrasena" [type]="hidePassword ? 'password' : 'text'" required>
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.get('nuevaContrasena')?.hasError('required')">
+              Campo requerido
+            </mat-error>
+            <mat-error *ngIf="form.get('nuevaContrasena')?.hasError('minlength')">
+              Mínimo 8 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="p-fluid">
+            <mat-label>Confirmar Contraseña</mat-label>
+            <input matInput formControlName="confirmarContrasena" type="password" required>
+            <mat-error *ngIf="form.get('confirmarContrasena')?.hasError('required')">
+              Campo requerido
+            </mat-error>
+          </mat-form-field>
+
+          <div class="p-d-flex p-jc-center">
+            <button mat-raised-button color="primary" type="submit" [disabled]="cargando">
+              <span *ngIf="!cargando">Restablecer Contraseña</span>
+              <span *ngIf="cargando">
+                <i class="pi pi-spinner pi-spin" style="margin-right: 0.5rem;"></i>
+                Procesando...
+              </span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
