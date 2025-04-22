@@ -60,6 +60,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogArticuloDetalleComponent } from './vistas/dialog/dialog-articulo-detalle/dialog-articulo-detalle.component';
 import { RestablecerPasswordComponent } from './vistas/restablecer-password/restablecer-password.component';
 import { RestablecerContrasenaIngresoComponent } from './vistas/restablecer-contrasena-ingreso/restablecer-contrasena-ingreso.component';
+import { MatMenuModule } from '@angular/material/menu';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -124,7 +126,8 @@ import { RestablecerContrasenaIngresoComponent } from './vistas/restablecer-cont
     MatNativeDateModule,
     MatTabsModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatMenuModule
   ],
   providers: [
     {

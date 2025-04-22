@@ -2,7 +2,37 @@
   <span class="toolbar-title" (click)="navigateTo('/inicio')">Gestión de Inventario</span>
   <span class="spacer"></span>
   <span class="user-info">Bienvenido, {{ username }}</span>
-  <button mat-icon-button (click)="logout()" aria-label="Cerrar sesión">
-    <mat-icon>logout</mat-icon>
+
+  <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Menú de usuario">
+    <mat-icon>account_circle</mat-icon>
   </button>
+
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Cerrar sesión</span>
+    </button>
+    <button mat-menu-item (click)="abrirDialogoCambioClave()">
+      <mat-icon>vpn_key</mat-icon>
+      <span>Cambiar clave</span>
+    </button>
+  </mat-menu>
 </div>
+
+<ng-template #dialogoCambioClave>
+  <h2 mat-dialog-title>Cambiar contraseña</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nueva Contraseña</mat-label>
+      <input matInput type="password" [(ngModel)]="claveNueva" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Verifique Contraseña</mat-label>
+      <input matInput type="password" [(ngModel)]="claveComprobar" />
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cerrarDialogo()">Cancelar</button>
+    <button mat-button color="primary" (click)="cambiarClave()">Cambiar</button>
+  </mat-dialog-actions>
+</ng-template>

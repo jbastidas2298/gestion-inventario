@@ -71,5 +71,12 @@ export class UserService {
     formData.append('file', file); 
     return this.http.post<string>(`${this.apiUrl}/importar-excel`, formData);
   }
+
+  cambiarClave(idUsuario: number, claveNueva: string): Observable<any> {
+    const body = {
+      nuevaClave: claveNueva
+    };
+    return this.http.put(`${this.apiUrl}/actualizarClave/${idUsuario}`, body);
+  }
   
 }

@@ -11,7 +11,7 @@ import { RestablecerPasswordService } from 'src/app/services/RestablecerPassword
   styleUrls: ['./restablecer-contrasena-ingreso.component.scss']
 })
 export class RestablecerContrasenaIngresoComponent implements OnInit {
-
+  regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
   form: FormGroup;
   token: string;
   cargando = false;
@@ -63,6 +63,14 @@ export class RestablecerContrasenaIngresoComponent implements OnInit {
       this.notificacion.showError('Las contraseñas no coinciden');
       return;
     }
+
+    if (!this.regex.test(this.form.value.nuevaContrasena)) {
+      this.notificacion.showError(
+        'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo.'
+      );
+      return;
+    }
+
 
     this.cargando = true;
     this.restablecimientoService
