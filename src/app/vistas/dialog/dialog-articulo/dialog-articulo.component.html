@@ -25,35 +25,48 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Marca</mat-label>
-      <input matInput formControlName="marca" (blur)="asignarValorPredeterminado('marca')"/>
+      <input matInput formControlName="marca" (blur)="asignarValorPredeterminado('marca')" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Serie</mat-label>
-      <input matInput formControlName="serie" (blur)="asignarValorPredeterminado('serie')"/>
+      <input matInput formControlName="serie" (blur)="asignarValorPredeterminado('serie')" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Modelo</mat-label>
-      <input matInput formControlName="modelo" (blur)="asignarValorPredeterminado('modelo')"/>
+      <input matInput formControlName="modelo" (blur)="asignarValorPredeterminado('modelo')" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Ubicación Edificio</mat-label>
-      <input matInput formControlName="ubicacion" (blur)="asignarValorPredeterminado('ubicacion')"/>
+      <input matInput formControlName="ubicacion" (blur)="asignarValorPredeterminado('ubicacion')" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Sección</mat-label>
-      <input matInput formControlName="seccion" (blur)="asignarValorPredeterminado('seccion')"/>
+      <input matInput formControlName="seccion" (blur)="asignarValorPredeterminado('seccion')" />
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Grupo Activo</mat-label>
-      <mat-select formControlName="grupoActivo">
-        <mat-option *ngFor="let grupo of grupoActivo" [value]="grupo">{{ grupo }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <mat-form-field appearance="fill" style="flex: 1;">
+        <mat-label>Grupo Activo</mat-label>
+        <mat-select formControlName="grupoActivo" style="flex: 1;">
+          <mat-option *ngFor="let grupo of grupoActivo" [value]="grupo.id">
+            {{ grupo.codigo }} - {{ grupo.descripcion }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-icon-button color="primary" (click)="abrirDialogAgregarGrupo()">
+        <mat-icon>{{ articuloForm.controls['grupoActivo'].value ? 'edit' : 'add' }}</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn" (click)="eliminarGrupoActivo(articuloForm.controls['grupoActivo'].value)"
+        *ngIf="articuloForm.controls['grupoActivo'].value">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
 
     <mat-form-field appearance="fill">
       <mat-label>Estado</mat-label>
@@ -80,3 +93,30 @@
   <button mat-button (click)="onCancel()">Cancelar</button>
   <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
 </mat-dialog-actions>
+
+<div *ngIf="mostrarDialogAgregarGrupo" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5);
+         display: flex; justify-content: center; align-items: center; z-index: 1000;">
+
+  <div
+    style="background: #fff; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; display: grid; gap: 16px;">
+    <h3 style="margin: 0;">Agregar Nuevo Grupo de Activo</h3>
+
+    <form [formGroup]="nuevoGrupoForm" style="display: grid; gap: 16px;">
+      <mat-form-field appearance="fill">
+        <mat-label>Código de Grupo</mat-label>
+        <input matInput formControlName="codigo" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Descripción de Grupo</mat-label>
+        <input matInput formControlName="descripcion" />
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button mat-button (click)="cancelarAgregarGrupo()">Cancelar</button>
+        <button mat-raised-button color="primary" (click)="guardarNuevoGrupo()">Agregar</button>
+      </div>
+    </form>
+  </div>
+
+</div>

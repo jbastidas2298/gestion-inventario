@@ -1,8 +1,12 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
 import { DialogEscanerComponent } from '../dialog-escaner/dialog-escaner.component';
+import { GrupoActivoService } from 'src/app/services/grupoActivo.service';
+import { GrupoActivo } from 'src/app/dominio/grupoActivo';
+import { NotificationService } from 'src/app/services/Notification.service';
+import { DialogConfirmarComponent } from '../dialog-confirmar/dialog-confirmar.component';
 
 @Component({
   selector: 'app-dialog-articulo',
@@ -17,23 +21,25 @@ export class DialogArticuloComponent implements OnInit {
   scannerActive: boolean = false;
   selectedDevice: MediaDeviceInfo | null = null;
   availableDevices: MediaDeviceInfo[] = [];
+  mostrarDialogAgregarGrupo = false;
+  nuevoGrupoForm: FormGroup;
   estados: string[] = [
     'DISPONIBLE',
     'REVISION_TECNICA',
     'DADO_BAJA'
   ];
 
-  grupoActivo: string[] = [
-    'BIENES_SUJETOS_A_CONTROL',
-    'EQUIPO_ELECTRONICO'
-  ];
+  grupoActivo: GrupoActivo[] = [];
   private codeReader: BrowserMultiFormatReader;
-
+  grupoSeleccionado: GrupoActivo | null = null;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<DialogArticuloComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog,
+    private grupoActivoService: GrupoActivoService,
+    private notificacionService: NotificationService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.codeReader = new BrowserMultiFormatReader();
 
@@ -48,14 +54,23 @@ export class DialogArticuloComponent implements OnInit {
       seccion: [data?.seccion || '', Validators.required],
       ubicacion: [data?.ubicacion || '', Validators.required],
       estado: [data?.estado || '', Validators.required],
-      grupoActivo: [data?.grupoActivo || '', Validators.required],
+      grupoActivo: [data?.grupoActivo || '', [Validators.required, this.grupoActivoValidator]],
       descripcion: [data?.descripcion || '', Validators.required],
       observacion: [data?.observacion || ''],
       asignarseArticulo: [true],
     });
+
+    this.nuevoGrupoForm = this.fb.group({
+      codigo: [''],
+      descripcion: ['']
+    });
   }
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.obtenerGrupoActivo();
+    }, 0);
+
     if (this.data?.id) {
       this.articuloForm.controls['codigoInterno'].disable();
       if (this.data?.estado === 'REVISION_TECNICA') {
@@ -68,6 +83,7 @@ export class DialogArticuloComponent implements OnInit {
     }
     this.articuloForm.valueChanges.subscribe((values) => {
       Object.keys(values).forEach((key) => {
+        if (key === 'id') return;
         if (values[key] === '' || values[key] === null || values[key] === undefined) {
           this.articuloForm.get(key)?.setValue('S/N', { emitEvent: false });
         }
@@ -78,6 +94,8 @@ export class DialogArticuloComponent implements OnInit {
       });
     });
   }
+
+
 
   asignarValorPredeterminado(controlName: string): void {
     const control = this.articuloForm.get(controlName);
@@ -121,5 +139,89 @@ export class DialogArticuloComponent implements OnInit {
   onCancel() {
     this.dialogRef.close();
   }
-  
+
+  obtenerGrupoActivo(): void {
+    this.grupoActivoService.obtenerGrupoActivo().subscribe((data) => {
+      const grupoVacio: GrupoActivo = { id: 0, codigo: '', descripcion: '' };
+      this.grupoActivo = [grupoVacio, ...data];
+
+      const grupoId = this.data?.grupoActivo;
+      const grupoIdNormalizado = typeof grupoId === 'string' ? parseInt(grupoId, 10) : grupoId;
+
+      if (grupoIdNormalizado) {
+        this.articuloForm.controls['grupoActivo'].setValue(grupoIdNormalizado);
+      }
+      this.cdRef.detectChanges();
+    });
+  }
+
+  grupoActivoValidator(control: AbstractControl) {
+    if (control.value === 0) {
+      return { grupoActivoInvalido: true };
+    }
+    return null;
+  }
+
+  abrirDialogAgregarGrupo() {
+    const idSeleccionado = this.articuloForm.controls['grupoActivo'].value;
+
+    const grupoSeleccionado = this.grupoActivo.find(grupo => grupo.id === idSeleccionado);
+
+    if (grupoSeleccionado) {
+      this.mostrarDialogAgregarGrupo = true;
+      this.nuevoGrupoForm.setValue({
+        codigo: grupoSeleccionado.codigo,
+        descripcion: grupoSeleccionado.descripcion
+      });
+      this.grupoSeleccionado = grupoSeleccionado;
+    } else {
+      this.nuevoGrupoForm.reset();
+      this.mostrarDialogAgregarGrupo = true;
+      this.grupoSeleccionado = null;
+    }
+  }
+
+
+
+  cancelarAgregarGrupo() {
+    this.mostrarDialogAgregarGrupo = false;
+    this.nuevoGrupoForm.reset();
+  }
+
+  guardarNuevoGrupo() {
+    if (this.nuevoGrupoForm.valid) {
+      const nuevoGrupo: GrupoActivo = {
+        id: this.grupoSeleccionado ? this.grupoSeleccionado.id : 0,
+        codigo: this.nuevoGrupoForm.value.codigo,
+        descripcion: this.nuevoGrupoForm.value.descripcion,
+      }
+      this.grupoActivoService.guardarGrupoActivo(nuevoGrupo).subscribe((grupo) => {
+        this.mostrarDialogAgregarGrupo = false;
+        this.nuevoGrupoForm.reset();
+        this.notificacionService.showSuccess('Grupo activo guardado correctamente');
+        this.obtenerGrupoActivo();
+      });
+      this.nuevoGrupoForm.reset();
+    }
+  }
+
+  eliminarGrupoActivo(idGrupoActivo: number) {
+    const dialogRef = this.dialog.open(DialogConfirmarComponent, {
+      width: '400px',
+      data: {
+        titulo: 'Confirmar Eliminación',
+        mensaje: '¿Está seguro de que desea eliminar este grupo activo? Si el grupo está asignado a algún artículo, deberá cambiar primero el grupo en los artículos asignados antes de eliminarlo.',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.grupoActivoService.eliminarGrupoActivo(idGrupoActivo).subscribe(() => {
+          this.notificacionService.showSuccess('Grupo activo eliminado correctamente');
+          this.obtenerGrupoActivo();
+        });
+      }
+    });
+
+  }
 }
