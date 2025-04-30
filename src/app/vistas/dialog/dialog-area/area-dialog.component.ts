@@ -31,7 +31,6 @@ export class AreaDialogComponent {
 
   onSave(): void {
     if (!this.usuarioSeleccionado) {
-      console.error('Debe seleccionar un usuario');
       return;
     }
 

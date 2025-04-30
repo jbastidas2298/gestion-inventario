@@ -3,14 +3,16 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Usuario } from '../dominio/usuario';
+import { articuloInventario } from '../dominio/articuloInventario';
+import { ArticuloInventarioPage } from '../dominio/articuloInventarioPage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArchivoService {
-    private apiUrl = `${environment.apiUrl}/inventario/articulo/archivo`;
+  private apiUrl = `${environment.apiUrl}/inventario/articulo/archivo`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
 
   subirImagen(id: number, file: File) {
@@ -58,7 +60,7 @@ export class ArchivoService {
   generarReporteItems(articuloId: number): Observable<Blob> {
     const url = `${this.apiUrl}/reporteArticulo/`;
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post(url+articuloId,'', {
+    return this.http.post(url + articuloId, '', {
       headers,
       responseType: 'blob',
     });
@@ -67,7 +69,7 @@ export class ArchivoService {
   generarReporteActaEntrega(articuloId: number): Observable<Blob> {
     const url = `${this.apiUrl}/reporteActaEntrega/`;
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post(url+articuloId,'', {
+    return this.http.post(url + articuloId, '', {
       headers,
       responseType: 'blob',
     });
@@ -88,21 +90,51 @@ export class ArchivoService {
 
   generarReporteExcelAsignacionesUsuario(id: number, tipoRelacion: string): Observable<Blob> {
     const url = `${this.apiUrl}/reporte-excel-usuario`;
-    const params = { id: id.toString(), tipoRelacion: tipoRelacion }; 
-  
-    return this.http.post(url, null, { 
-      params: params, 
-      responseType: 'blob', 
+    const params = { id: id.toString(), tipoRelacion: tipoRelacion };
+
+    return this.http.post(url, null, {
+      params: params,
+      responseType: 'blob',
     });
   }
 
-  generarReporteEstados(estado:string, desde:Date, hasta:Date): Observable<Blob> {
+  generarReporteEstados(estado: string, desde: Date, hasta: Date): Observable<Blob> {
     const url = `${this.apiUrl}/reporte-excel-estados`;
-    const params = { estado: estado, desde: desde.toISOString(), hasta: hasta.toISOString() }; 
-  
-    return this.http.post(url, null, { 
-      params: params, 
-      responseType: 'blob', 
+    const params = { estado: estado, desde: desde.toISOString(), hasta: hasta.toISOString() };
+
+    return this.http.post(url, null, {
+      params: params,
+      responseType: 'blob',
+    });
+  }
+
+  obtenerPreliminarInventario(filtros: any, page: number, size: number): Observable<ArticuloInventarioPage> {
+    const url = `${this.apiUrl}/preliminar-inventario`;
+
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    Object.keys(filtros).forEach(key => {
+      if (filtros[key] != null && filtros[key] !== '') {
+        params = params.set(key, filtros[key]);
+      }
+    });
+
+    return this.http.get<ArticuloInventarioPage>(url, { params });
+  }
+
+  obtenerReporteInventario(filtros: any,): Observable<Blob> {
+    const url = `${this.apiUrl}/reporte-inventario`;
+    let params = new HttpParams()
+    Object.keys(filtros).forEach(key => {
+      if (filtros[key] != null && filtros[key] !== '') {
+        params = params.set(key, filtros[key]);
+      }
+    });
+    return this.http.post(url, null, {
+      params: params,
+      responseType: 'blob',
     });
   }
 

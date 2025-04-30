@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { ArchivoService } from 'src/app/services/archivo.service';
 import { NotificationService } from 'src/app/services/Notification.service';
+import { GrupoActivo } from 'src/app/dominio/grupoActivo';
+import { GrupoActivoService } from 'src/app/services/grupoActivo.service';
+import { articuloInventario } from 'src/app/dominio/articuloInventario';
+import { ArticuloInventarioPage } from 'src/app/dominio/articuloInventarioPage';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'app-inventario-reportes',
@@ -20,21 +25,45 @@ export class InventarioReportesComponent implements OnInit {
   usuariosFiltrados!: Observable<any[]>;
 
   estadoSeleccionado: string | null = null;
-  estados: string[] = ['REVISION_TECNICA', 'DADO_BAJA'];
+  estados: string[] = ['', 'REVISION_TECNICA', 'DADO_BAJA', 'DISPONIBLE'];
   fechaInicio: Date | null = null;
   fechaFin: Date | null = null;
 
   usuarioSeleccionado: any | null = null;
-
+  grupoActivo: GrupoActivo[] = [];
+  filtroForm!: FormGroup;
+  preliminarGenerado = false;
+  inicioPagina = true
+  filteredArticulos: any[] = [];
+  paginaActual: number = 0;
+  size: number = 10;
+  totalArticulos: number = 0;
+  totalPages: number = 0;
 
   constructor(
-    private userService: UserService, 
+    private userService: UserService,
     private archivoService: ArchivoService,
-    private notificacionService: NotificationService
-  ) { }
+    private notificacionService: NotificationService,
+    private grupoActivoService: GrupoActivoService,
+    private fb: FormBuilder
+  ) {
+    this.filtroForm = this.fb.group({
+      estado: [''],
+      usuario: [''],
+      grupoActivo: [''],
+      nombre: [''],
+      marca: [''],
+      edificio: [''],
+      seccion: [''],
+      tipoRelacion: ['']
+    }, {
+      validators: this.alMenosUnCampoLlenoValidator
+    });
+  }
 
   ngOnInit() {
     this.cargarUsuariosAreas();
+    this.obtenerGrupoActivo();
   }
 
   cargarUsuariosAreas() {
@@ -75,7 +104,7 @@ export class InventarioReportesComponent implements OnInit {
   generarReporteAsignaciones() {
     if (this.tipoAsignacion === 'completo') {
       this.generarReporteAsignacionesCompleto();
-    }else{
+    } else {
       this.generarReporteAsignacionesUsuario();
     }
   }
@@ -120,17 +149,17 @@ export class InventarioReportesComponent implements OnInit {
       this.notificacionService.showError('Por favor, selecciona un estado.');
       return;
     }
-  
+
     if (!this.fechaInicio) {
       this.notificacionService.showError('Por favor, selecciona la fecha de inicio.');
       return;
     }
-  
+
     if (!this.fechaFin) {
       this.notificacionService.showError('Por favor, selecciona la fecha de fin.');
       return;
     }
-  
+
     if (this.fechaInicio > this.fechaFin) {
       this.notificacionService.showError('La fecha de inicio no puede ser mayor a la fecha de fin.');
       return;
@@ -148,8 +177,64 @@ export class InventarioReportesComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       },
     });
- 
-  }
-  
 
+  }
+
+  obtenerGrupoActivo(): void {
+    this.grupoActivoService.obtenerGrupoActivo().subscribe((data) => {
+      const grupoVacio: GrupoActivo = { id: null, codigo: '', descripcion: '' };
+      this.grupoActivo = [grupoVacio, ...data];
+    });
+  }
+
+  alMenosUnCampoLlenoValidator(group: AbstractControl): { [key: string]: boolean } | null {
+    const tieneAlMenosUno = Object.values(group.value).some(val => val && val.toString().trim() !== '');
+    return tieneAlMenosUno ? null : { alMenosUnCampo: true };
+  }
+
+  generarPreliminar(): void {
+    const filtros = this.filtroForm.value;
+    filtros.tipoRelacion = this.usuarioSeleccionado?.tipoRelacion;
+
+    const page = this.paginaActual;
+    const size = this.size;
+    this.archivoService.obtenerPreliminarInventario(filtros, page, size).subscribe({
+      next: (data: ArticuloInventarioPage) => {
+        this.filteredArticulos = data.content;
+        this.totalArticulos = data.totalElements;
+        this.totalPages = data.totalPages;
+        this.paginaActual = data.number;
+        if (this.totalPages > 0) {
+          this.preliminarGenerado = true;
+        }else {
+          this.preliminarGenerado = false;
+        }
+        this.inicioPagina = false
+      },
+    });
+  }
+
+  cargarDatosPaginados(event: LazyLoadEvent) {
+    this.paginaActual = event.first / event.rows;
+    this.size = event.rows;
+
+    this.generarPreliminar();
+  }
+
+
+  generarReporteFiltros(): void {
+    if (!this.preliminarGenerado) return;
+    this.archivoService.obtenerReporteInventario(this.filtroForm.value).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Reporte_${new Date().toISOString()}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+    });
+  }
 }

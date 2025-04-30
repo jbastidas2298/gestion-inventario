@@ -4,33 +4,116 @@
   </div>
 
   <mat-tab-group mat-align-tabs="center" [(selectedIndex)]="tabIndex">
-    <mat-tab label="Asignaciones">
-      <div style="padding: 16px;">
-        <h3>Reporte de asignaciones</h3>
-        <mat-form-field appearance="fill" style="width: 100%; margin-bottom: 16px;">
-          <mat-label>Tipo de Reporte</mat-label>
-          <mat-select [(value)]="tipoAsignacion">
-            <mat-option value="completo" (onSelectionChange)="onTipoAsignacionChange()">Completo</mat-option>
-            <mat-option value="usuario" (onSelectionChange)="onTipoAsignacionChange()">Por Usuario</mat-option>
-          </mat-select>
-        </mat-form-field>
+    <mat-tab label="Inventario">
+      <form [formGroup]="filtroForm" style="padding: 16px;">
+        <h3>Reporte completo de Inventario</h3>
 
-        <mat-form-field *ngIf="tipoAsignacion === 'usuario'" appearance="fill" style="width: 100%; margin-top: 16px;">
-          <mat-label>Seleccionar Usuario</mat-label>
-          <input type="text" matInput [formControl]="usuarioFiltro" [matAutocomplete]="auto"
-            placeholder="Escribe para buscar..." />
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario"
-              (onSelectionChange)="onUsuarioSeleccionado(usuario)">
-              {{ usuario.nombre }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+          <mat-form-field appearance="fill">
+            <mat-label>Seleccionar Estado</mat-label>
+            <mat-select formControlName="estado">
+              <mat-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <button mat-raised-button color="primary" (click)="generarReporteAsignaciones()">
-          <img src="assets/excel.png" alt="Excel" style="width: 20px; height: 20px; margin-right: 8px;" />
-          Generar Reporte
-        </button>
+          <mat-form-field appearance="fill">
+            <mat-label>Seleccionar Usuario</mat-label>
+            <input matInput [matAutocomplete]="autoUsuario" formControlName="usuario"
+              placeholder="Escribe para buscar..." />
+            <mat-autocomplete #autoUsuario="matAutocomplete">
+              <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario.nombre">
+                {{ usuario.nombre }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Grupo Activo</mat-label>
+            <mat-select formControlName="grupoActivo">
+              <mat-option *ngFor="let grupo of grupoActivo" [value]="grupo.id">
+                {{ grupo.codigo }} - {{ grupo.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Nombre artículo</mat-label>
+            <input matInput formControlName="nombre" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Marca</mat-label>
+            <input matInput formControlName="marca" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Edificio</mat-label>
+            <input matInput formControlName="edificio" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Sección</mat-label>
+            <input matInput formControlName="seccion" />
+          </mat-form-field>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; gap: 16px;">
+          <button mat-raised-button color="primary" type="button" (click)="generarPreliminar()">Preliminar</button>
+          <button mat-raised-button color="accent" type="submit" [disabled]="!preliminarGenerado" (click)="generarReporteFiltros">Generar
+            Reporte</button>
+        </div>
+      </form>
+
+      <div *ngIf="!inicioPagina" style="margin: 16px;">
+        <p-table [value]="filteredArticulos" [paginator]="true" [rows]="size" [totalRecords]="totalArticulos"
+          [lazy]="true" [first]="paginaActual * size" [rowsPerPageOptions]="[5, 10, 20, 50,100]"
+          (onLazyLoad)="cargarDatosPaginados($event)" [responsiveLayout]="'scroll'"
+          [style]="{ minWidth: '1000px', width: '100%' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Usuario</th>
+              <th>Artículo</th>
+              <th>Cód. Interno</th>
+              <th>Cód. Origen</th>
+              <th>Fecha Asignación</th>
+              <th>Tipo Relación</th>
+              <th>Estado</th>
+              <th>Marca</th>
+              <th>Serie</th>
+              <th>Modelo</th>
+              <th>Ubicación</th>
+              <th>Sección</th>
+              <th>Grupo Activo</th>
+              <th>Descripción</th>
+              <th>Fecha Estado</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-art>
+            <tr>
+              <td>{{ art.nombreAsignado }}</td>
+              <td>{{ art.nombreArticulo }}</td>
+              <td>{{ art.codigoInterno }}</td>
+              <td>{{ art.codigoOrigen }}</td>
+              <td>{{ art.fechaAsignacion | date:'short' }}</td>
+              <td>{{ art.tipoRelacion }}</td>
+              <td>{{ art.estadoArticulo }}</td>
+              <td>{{ art.marcaArticulo }}</td>
+              <td>{{ art.serieArticulo }}</td>
+              <td>{{ art.modeloArticulo }}</td>
+              <td>{{ art.ubicacionArticulo }}</td>
+              <td>{{ art.seccionArticulo }}</td>
+              <td>{{ art.grupoActivo }}</td>
+              <td>{{ art.descripcion }}</td>
+              <td>{{ art.fechaEstado | date:'short' }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="15">No se encontraron resultados</td>
+            </tr>
+          </ng-template>
+        </p-table>
+
       </div>
     </mat-tab>
 
@@ -63,5 +146,7 @@
         </button>
       </div>
     </mat-tab>
+
+
   </mat-tab-group>
 </p-card>
