@@ -223,7 +223,8 @@ export class InventarioReportesComponent implements OnInit {
 
 
   generarReporteFiltros(): void {
-    if (!this.preliminarGenerado) return;
+    if (!this.preliminarGenerado) 
+      return;
     this.archivoService.obtenerReporteInventario(this.filtroForm.value).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
