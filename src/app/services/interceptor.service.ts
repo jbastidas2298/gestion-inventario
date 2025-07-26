@@ -13,12 +13,14 @@ import { LoadingService } from './loading.service';
 import { NotificationService } from './Notification.service';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { delay } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class Interceptor implements HttpInterceptor {
   constructor(
     private loadingService: LoadingService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -51,7 +53,11 @@ export class Interceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta de nuevo.';
 
-        if (error.error) {
+        if (error.status === 401 || error.status === 403) {
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']);
+          errorMessage = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
+        } else if (error.error) {
           if (typeof error.error === 'string') {
             try {
               const parsedError = JSON.parse(error.error);
@@ -66,7 +72,6 @@ export class Interceptor implements HttpInterceptor {
             errorMessage = `Código del error: ${backendError.codigo || 'Desconocido'}. Mensaje: ${backendError.mensaje}`;
           }
         }
-
         this.notificationService.showError(errorMessage);
 
         return throwError(() => error);
