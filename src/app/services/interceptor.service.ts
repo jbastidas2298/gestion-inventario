@@ -53,7 +53,7 @@ export class Interceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta de nuevo.';
 
-        if (error.status === 401 || error.status === 403) {
+        if (error.status === 401) {
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
           errorMessage = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
