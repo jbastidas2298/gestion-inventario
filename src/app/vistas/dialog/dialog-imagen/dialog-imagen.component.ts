@@ -33,8 +33,20 @@ export class DialogImagenComponent implements AfterViewInit {
   }
 
   seleccionarArchivo(evento: any): void {
-    const archivo: File = evento.files[0]; 
+    const archivo: File = evento.files[0];
+
     if (archivo) {
+      const maxSizeMB = 10;
+      const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+      if (archivo.size > maxSizeBytes) {
+        this.notificacion.showError(
+          `El archivo seleccionado supera el tamaño máximo permitido de ${maxSizeMB} MB.`
+        );
+        this.archivoSeleccionado = null;
+        return;
+      }
+
       this.archivoSeleccionado = archivo;
       this.imagenCapturada = null;
     }
