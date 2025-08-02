@@ -138,4 +138,12 @@ export class ArchivoService {
     });
   }
 
+  eliminarArchivo(id: number): Observable<Blob> {
+    const url = `${this.apiUrl}/eliminar/${id}`;
+    return this.http.delete(url, {
+      responseType: 'blob',
+      headers: { 'Content-Type': 'text/plain' },
+    });
+  }
+
 }

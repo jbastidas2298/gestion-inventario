@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemsService } from 'src/app/services/items.service';
-import { DialogPdfComponent } from '../dialog/dialog-pdf/dialog-pdf.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/services/Notification.service';
 import { UserService } from 'src/app/services/user.service';
@@ -24,8 +23,8 @@ export class InventarioDetalleComponent implements OnInit {
     private dialog: MatDialog,
     private notificationService: NotificationService,
     private userService: UserService,
-    private archivoService : ArchivoService
-  ) {}
+    private archivoService: ArchivoService
+  ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
@@ -48,13 +47,13 @@ export class InventarioDetalleComponent implements OnInit {
       reader.readAsDataURL(data);
     });
   }
-  
+
   Revisar(path: string): void {
     this.archivoService.verArchivo(path)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
-          window.open(url); 
+          window.open(url);
         },
       });
   }
@@ -63,34 +62,19 @@ export class InventarioDetalleComponent implements OnInit {
     this.archivoService.descargarArchivo(path).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a'); 
+        const a = document.createElement('a');
         a.href = url;
-        a.download = this.obtenerNombreArchivo(path); 
-        document.body.appendChild(a); 
-        a.click(); 
-        document.body.removeChild(a); 
-        window.URL.revokeObjectURL(url); 
+        a.download = this.obtenerNombreArchivo(path);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
       },
     });
   }
   isAdmin(): boolean {
-    const roles = this.userService.getRoles(); 
+    const roles = this.userService.getRoles();
     return roles.includes('ADMINISTRADOR');
-  }
-  agregarPdf() {
-    const dialogRef = this.dialog.open(DialogPdfComponent);
-
-    dialogRef.afterClosed().subscribe((file: File) => {
-      if (file) {
-        this.archivoService.subirPdf(this.id, file).subscribe({
-          next: (response) => {
-            this.notificationService.showSuccess('Archivo subido exitosamente');
-            this.cargarArticuloDetalle(this.id);
-            this.cargarCodigoQR(this.id);
-          },
-        });
-      }
-    });
   }
 
   generarReporte(): void {
@@ -99,7 +83,7 @@ export class InventarioDetalleComponent implements OnInit {
         const url = window.URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'Reporte_'+this.articulo.articulo.codigoInterno+'.pdf';
+        a.download = 'Reporte_' + this.articulo.articulo.codigoInterno + '.pdf';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -107,9 +91,18 @@ export class InventarioDetalleComponent implements OnInit {
       },
     });
   }
-  
+
   private obtenerNombreArchivo(path: string): string {
     return path.split('/').pop() || 'archivo';
+  }
+
+  Eliminar(id: number): void {
+    this.archivoService.eliminarArchivo(id).subscribe({
+      next: (blob) => {
+        this.notificationService.showSuccess('Archivo eliminado exitosamente');
+        this.cargarArticuloDetalle(this.id);
+      },
+    });
   }
 
 }

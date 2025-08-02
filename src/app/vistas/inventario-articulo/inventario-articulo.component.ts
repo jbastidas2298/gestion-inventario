@@ -9,7 +9,6 @@ import { UserService } from 'src/app/services/user.service';
 import { ArchivoService } from 'src/app/services/archivo.service';
 import { PageEvent } from '@angular/material/paginator';
 import { DialogConfirmarComponent } from '../dialog/dialog-confirmar/dialog-confirmar.component';
-import { BrowserMultiFormatReader } from '@zxing/library';
 import { DialogEscanerComponent } from '../dialog/dialog-escaner/dialog-escaner.component';
 import { DialogArticuloDetalleComponent } from '../dialog/dialog-articulo-detalle/dialog-articulo-detalle.component';
 
@@ -28,9 +27,15 @@ export class InventarioArticuloComponent implements OnInit {
   totalElements = 0;
   pageSize = 10;
   pageIndex = 0;
-  delayTimer: any; 
-  estadoFiltro: string = 'DISPONIBLE'; 
-  
+  delayTimer: any;
+  estadoFiltro: string = 'DISPONIBLE';
+  mostrarDialogPdf = false;
+  selectedFile: File | null = null;
+  id: number | null = null;
+  articuloDetalle: any = null;
+  expandedRowMap: { [key: string]: boolean } = {};
+  articulosDetalleMap: { [id: number]: any } = {};
+
   constructor(
     private dialog: MatDialog,
     private itemsService: ItemsService,
@@ -38,8 +43,8 @@ export class InventarioArticuloComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private archivoService: ArchivoService,
-  ) {  }
-  
+  ) { }
+
 
   ngOnInit() {
     this.cargarArticulos();
@@ -68,7 +73,7 @@ export class InventarioArticuloComponent implements OnInit {
 
   filtrarPorEstado(estado: string): void {
     this.estadoFiltro = estado;
-    this.pageIndex = 0; 
+    this.pageIndex = 0;
     this.cargarArticulos(this.pageIndex, this.pageSize);
   }
 
@@ -123,12 +128,12 @@ export class InventarioArticuloComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.itemsService.eliminarItem(id).
-        subscribe({
-          next: () => {
-            this.cargarArticulos(); 
-            this.notificationService.showSuccess('Artículo eliminado exitosamente.');
-          },
-        });
+          subscribe({
+            next: () => {
+              this.cargarArticulos();
+              this.notificationService.showSuccess('Artículo eliminado exitosamente.');
+            },
+          });
       }
     });
   }
@@ -142,6 +147,7 @@ export class InventarioArticuloComponent implements OnInit {
           next: (response) => {
             this.notificationService.showSuccess('Imagen subida exitosamente');
             this.cargarArticulos();
+            this.cargarArticuloDetalle(id, true);
           },
         });
       }
@@ -219,10 +225,10 @@ export class InventarioArticuloComponent implements OnInit {
 
   activarEscaner() {
     const dialogRef = this.dialog.open(DialogEscanerComponent, {
-      width: '500px', 
-      height: 'auto', 
-      maxWidth: '90vw', 
-      maxHeight: '90vh', 
+      width: '500px',
+      height: 'auto',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
       disableClose: false,
     });
 
@@ -237,8 +243,98 @@ export class InventarioArticuloComponent implements OnInit {
     this.itemsService.obtenerItemCodigo(codigo).subscribe((data: any) => {
       this.dialog.open(DialogArticuloDetalleComponent, {
         width: '400px',
-        data: data, 
+        data: data,
       });
+    });
+  }
+
+  seleccionarArchivo(event: any) {
+    const file = event.files[0];
+
+    if (file && file.type === 'application/pdf') {
+      this.selectedFile = file;
+    } else {
+      this.selectedFile = null;
+      this.notificationService.showError('Solo se permiten archivos PDF.');
+    }
+  }
+
+  subirArchivo() {
+    if (this.selectedFile) {
+      this.archivoService.subirPdf(this.id, this.selectedFile).subscribe({
+        next: (response) => {
+          this.notificationService.showSuccess('Imagen subida exitosamente');
+          this.cargarArticulos();
+          this.cargarArticuloDetalle(this.id, true);
+        },
+      });
+      this.mostrarDialogPdf = false;
+      this.selectedFile = null;
+    }
+  }
+
+  cancelar() {
+    this.mostrarDialogPdf = false;
+    this.selectedFile = null;
+  }
+
+  agregarPDF(id: number) {
+    this.id = id;
+    this.mostrarDialogPdf = true;
+  }
+
+
+  cargarArticuloDetalle(id: number, force: boolean = false): void {
+    if (this.expandedRowMap[id] && !force) {
+      delete this.expandedRowMap[id];
+      return;
+    }
+
+    if (this.articulosDetalleMap[id] && !force) {
+      this.expandedRowMap = { [id]: true };
+      return;
+    }
+
+    this.itemsService.getArticuloDetalle(id).subscribe(data => {
+      this.articulosDetalleMap[id] = data;
+      this.expandedRowMap = { [id]: true };
+    });
+  }
+
+  RevisarArchivo(path: string): void {
+    this.archivoService.verArchivo(path)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+        },
+      });
+  }
+
+  Descargar(path: string): void {
+    this.archivoService.descargarArchivo(path).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = this.obtenerNombreArchivo(path);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+    });
+  }
+  private obtenerNombreArchivo(path: string): string {
+    return path.split('/').pop() || 'archivo';
+  }
+
+  Eliminar(id: number, articuloId: number): void {
+    this.archivoService.eliminarArchivo(id).subscribe({
+      next: (blob) => {
+        this.notificationService.showSuccess('Archivo eliminado exitosamente');
+        this.cargarArticuloDetalle(articuloId, true);
+      },
     });
   }
 }

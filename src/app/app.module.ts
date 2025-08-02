@@ -47,7 +47,6 @@ import { AccordionModule } from 'primeng/accordion';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogConfirmarComponent } from './vistas/dialog/dialog-confirmar/dialog-confirmar.component';
 import { MatDividerModule } from '@angular/material/divider';
-import { DialogPdfComponent } from './vistas/dialog/dialog-pdf/dialog-pdf.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { InventarioReportesComponent } from './vistas/inventario-reportes/inventario-reportes.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -61,6 +60,8 @@ import { DialogArticuloDetalleComponent } from './vistas/dialog/dialog-articulo-
 import { RestablecerPasswordComponent } from './vistas/restablecer-password/restablecer-password.component';
 import { RestablecerContrasenaIngresoComponent } from './vistas/restablecer-contrasena-ingreso/restablecer-contrasena-ingreso.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { DialogModule } from 'primeng/dialog';
+
 
 @NgModule({
   declarations: [
@@ -82,7 +83,6 @@ import { MatMenuModule } from '@angular/material/menu';
     AsignacionDialogComponent,
     LoadingComponent,
     DialogConfirmarComponent,
-    DialogPdfComponent,
     InventarioReportesComponent,
     DialogEscanerComponent,
     DialogArticuloDetalleComponent,
@@ -127,7 +127,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTabsModule,
     MatAutocompleteModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    DialogModule
   ],
   providers: [
     {
