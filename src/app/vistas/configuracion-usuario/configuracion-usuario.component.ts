@@ -61,6 +61,7 @@ export class ConfiguracionUsuarioComponent implements OnInit {
       correo: '',
       activo: true,
       nombreCompleto: '',
+      identificacion: '',
       roles: []
     };
 
@@ -134,7 +135,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       this.userService.importarExcel(file).subscribe({
-        next: () => this.cargarUsuarios(),
+        next: () => {
+          this.cargarUsuarios();
+          this.notificationService.showSuccess('Usuarios importados exitosamente.');
+        },
       });
     }
   }

@@ -15,13 +15,12 @@
               <mat-option *ngFor="let estado of estados" [value]="estado">{{ estado }}</mat-option>
             </mat-select>
           </mat-form-field>
-
           <mat-form-field appearance="fill">
             <mat-label>Seleccionar Usuario</mat-label>
             <input matInput [matAutocomplete]="autoUsuario" formControlName="usuario"
               placeholder="Escribe para buscar..." />
-            <mat-autocomplete #autoUsuario="matAutocomplete">
-              <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario.nombre">
+            <mat-autocomplete #autoUsuario="matAutocomplete" [displayWith]="displayUsuario">
+              <mat-option *ngFor="let usuario of usuariosFiltrados | async" [value]="usuario">
                 {{ usuario.nombre }}
               </mat-option>
             </mat-autocomplete>
@@ -59,7 +58,8 @@
 
         <div style="margin-top: 24px; display: flex; gap: 16px;">
           <button mat-raised-button color="primary" type="button" (click)="generarPreliminar()">Preliminar</button>
-          <button mat-raised-button color="accent" type="submit" [disabled]="!preliminarGenerado" (click)="generarReporteFiltros()">Generar
+          <button mat-raised-button color="accent" type="submit" [disabled]="!preliminarGenerado"
+            (click)="generarReporteFiltros()">Generar
             Reporte</button>
         </div>
       </form>

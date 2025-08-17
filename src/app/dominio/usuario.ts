@@ -5,6 +5,7 @@ export interface Usuario {
     correo: string;
     activo: boolean;
     nombreCompleto: string;
+    identificacion: string;
     roles: string[];
   }
   

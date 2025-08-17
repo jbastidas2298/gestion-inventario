@@ -42,6 +42,14 @@
         El nombre completo es obligatorio
       </mat-error>
     </mat-form-field>
+    
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Identificación</mat-label>
+      <input matInput formControlName="identificacion" />
+      <mat-error *ngIf="usuarioForm.get('identificacion')?.hasError('required')">
+        La identificación es obligatoria
+      </mat-error>
+    </mat-form-field>
 
     <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Roles</mat-label>

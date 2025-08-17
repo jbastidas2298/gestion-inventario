@@ -18,7 +18,7 @@ import { DialogArticuloDetalleComponent } from '../dialog/dialog-articulo-detall
   styleUrls: ['./inventario-articulo.component.scss']
 })
 export class InventarioArticuloComponent implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('video', { static: false }) videoElement!: ElementRef;
   articulos: any[] = [];
   filteredArticulos: any[] = [];
@@ -182,10 +182,17 @@ export class InventarioArticuloComponent implements OnInit {
   }
 
   importarExcel(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (file) {
       this.archivoService.importarExcel(file).subscribe({
-        next: () => this.cargarArticulos(),
+        next: () => {
+          this.cargarArticulos();
+          this.fileInput.nativeElement.value = '';
+        },
+        error: () => {
+          this.fileInput.nativeElement.value = '';
+        }
       });
     }
   }

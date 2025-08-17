@@ -70,9 +70,14 @@ export class InventarioReportesComponent implements OnInit {
     this.userService.obtenerUsuariosAreas().subscribe({
       next: (data: any[]) => {
         this.usuarioAreas = data;
-        this.usuariosFiltrados = this.usuarioFiltro.valueChanges.pipe(
+
+        this.usuariosFiltrados = this.filtroForm.get('usuario')!.valueChanges.pipe(
           startWith(''),
-          map((value) => (typeof value === 'string' ? this.filtrarUsuarios(value) : this.usuarioAreas))
+          map((value) =>
+            typeof value === 'string'
+              ? this.filtrarUsuarios(value)
+              : this.usuarioAreas
+          )
         );
       },
     });
@@ -85,8 +90,8 @@ export class InventarioReportesComponent implements OnInit {
     );
   }
 
-  displayFn(usuario: any): string {
-    return usuario ? usuario.nombre : '';
+  displayUsuario(usuario: any): string {
+    return usuario && usuario.nombre ? usuario.nombre : '';
   }
 
   onUsuarioSeleccionado(usuario: any) {
@@ -194,7 +199,8 @@ export class InventarioReportesComponent implements OnInit {
 
   generarPreliminar(): void {
     const filtros = this.filtroForm.value;
-    filtros.tipoRelacion = this.usuarioSeleccionado?.tipoRelacion;
+    filtros.tipoRelacion = filtros.usuario?.tipoRelacion;
+    filtros.idUsuario = filtros.usuario?.id;
 
     const page = this.paginaActual;
     const size = this.size;
@@ -206,7 +212,7 @@ export class InventarioReportesComponent implements OnInit {
         this.paginaActual = data.number;
         if (this.totalPages > 0) {
           this.preliminarGenerado = true;
-        }else {
+        } else {
           this.preliminarGenerado = false;
         }
         this.inicioPagina = false
@@ -223,7 +229,7 @@ export class InventarioReportesComponent implements OnInit {
 
 
   generarReporteFiltros(): void {
-    if (!this.preliminarGenerado) 
+    if (!this.preliminarGenerado)
       return;
     this.archivoService.obtenerReporteInventario(this.filtroForm.value).subscribe({
       next: (blob) => {

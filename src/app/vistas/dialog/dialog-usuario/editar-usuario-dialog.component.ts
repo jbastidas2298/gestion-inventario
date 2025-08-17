@@ -23,6 +23,7 @@ export class EditarUsuarioDialogComponent {
       correo: [data.usuario.correo, [Validators.required, Validators.email]],
       activo: [data.usuario.activo],
       nombreCompleto: [data.usuario.nombreCompleto, [Validators.required]],
+      identificacion: [data.usuario.identificacion, [Validators.required]],
       roles: [data.usuario.roles, [Validators.required]]
     });
   }
