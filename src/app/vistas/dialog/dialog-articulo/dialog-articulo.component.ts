@@ -133,6 +133,15 @@ export class DialogArticuloComponent implements OnInit {
       return;
     }
 
+    const asignarseArticulo = this.articuloForm.get('asignarseArticulo')?.value;
+    const asignarBodega = this.articuloForm.get('asignarBodega')?.value;
+
+    if (!asignarseArticulo && !asignarBodega) {
+      this.notificacionService.showError('Debe seleccionar "Asignarse Artículo" o "Asignar a Bodega"');
+      return;
+    }
+
+
     this.dialogRef.close(this.articuloForm.value);
   }
 
