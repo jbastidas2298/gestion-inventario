@@ -85,7 +85,13 @@
       <textarea matInput formControlName="observacion" (blur)="asignarValorPredeterminado('observacion')"></textarea>
     </mat-form-field>
 
-    <mat-checkbox formControlName="asignarseArticulo" *ngIf="!data?.id">Asignarse Artículo</mat-checkbox>
+    <mat-checkbox formControlName="asignarseArticulo" *ngIf="!data?.id" (change)="onAsignarseChange('articulo')">
+      Asignarse Artículo
+    </mat-checkbox>
+
+    <mat-checkbox formControlName="asignarBodega" *ngIf="!data?.id" (change)="onAsignarseChange('bodega')">
+      Asignar a Bodega
+    </mat-checkbox>
   </form>
 </mat-dialog-content>
 

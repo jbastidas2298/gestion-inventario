@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-
+  hide = true;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,

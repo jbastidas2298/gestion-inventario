@@ -57,7 +57,8 @@ export class DialogArticuloComponent implements OnInit {
       grupoActivo: [data?.grupoActivo || '', [Validators.required, this.grupoActivoValidator]],
       descripcion: [data?.descripcion || '', Validators.required],
       observacion: [data?.observacion || ''],
-      asignarseArticulo: [true],
+      asignarseArticulo: [false],
+      asignarBodega: [false],
     });
 
     this.nuevoGrupoForm = this.fb.group({
@@ -224,4 +225,13 @@ export class DialogArticuloComponent implements OnInit {
     });
 
   }
+
+  onAsignarseChange(opcion: 'articulo' | 'bodega') {
+    if (opcion === 'articulo') {
+      this.articuloForm.get('asignarBodega')?.setValue(false, { emitEvent: false });
+    } else {
+      this.articuloForm.get('asignarseArticulo')?.setValue(false, { emitEvent: false });
+    }
+  }
+
 }

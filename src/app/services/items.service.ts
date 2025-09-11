@@ -7,28 +7,28 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ItemsService {
-    private apiUrl = `${environment.apiUrl}/inventario/articulo/items`;
+  private apiUrl = `${environment.apiUrl}/inventario/articulo/items`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   obtenerItems(page: number = 0, size: number = 10, filter: string = '', estado: string = ''): Observable<any> {
-    const params = { 
-      page: page.toString(), 
-      size: size.toString(), 
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
       filter,
       estado
     };
     return this.http.get(`${this.apiUrl}`, { params });
   }
-  
+
   agregarItem(item: any) {
     return this.http.post(`${this.apiUrl}`, item);
   }
-  
+
   actualizarItem(id: number, item: any) {
     return this.http.put(`${this.apiUrl}`, item);
   }
-  
+
   eliminarItem(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
   }
@@ -43,14 +43,14 @@ export class ItemsService {
       .set('size', size.toString())
       .set('filter_articulo', filter)
       .set('filter_usuario', filter_usuario);
-    
+
     return this.http.get(`${this.apiUrl}/asignaciones`, { params });
   }
   asignarItems(idsArticulos: number[], idUsuario: number, tipoRelacion: string) {
     const params = new HttpParams()
       .set('idRelacionado', idUsuario.toString())
       .set('tipoRelacion', tipoRelacion);
-  
+
     return this.http.post(`${this.apiUrl}/asignar`, idsArticulos, { params });
   }
 
@@ -67,23 +67,25 @@ export class ItemsService {
       .set('idUsuarioNuevo', idUsuarioNuevo.toString())
       .set('tipoRelacionNuevo', tipoRelacionNuevo)
       .set('descripcion', descripcion);
-  
+
     return this.http.post(`${this.apiUrl}/reasignar-todos`, null, { params });
   }
-  
+
   eliminarAsignacion(idArticulo: number) {
-    return this.http.delete(`${this.apiUrl}/eliminarAsignacion/${idArticulo}`, { responseType: 'text' });
+    return this.http.delete(`${this.apiUrl}/eliminarAsignacion/${idArticulo}`, {
+      responseType: 'blob'
+    });
   }
   
-  obtenerItemsServicioTecnico(){
+  obtenerItemsServicioTecnico() {
     return this.http.get(`${this.apiUrl}/servicio-tecnico`);
   }
 
-  obtenerItemsBaja(){
+  obtenerItemsBaja() {
     return this.http.get(`${this.apiUrl}/baja`);
   }
 
-  obtenerItemCodigo(codigo: string){
+  obtenerItemCodigo(codigo: string) {
     return this.http.get(`${this.apiUrl}/codigo/${codigo}`);
   }
 }

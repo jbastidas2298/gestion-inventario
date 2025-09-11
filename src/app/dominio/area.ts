@@ -5,4 +5,5 @@ export interface Area {
     nombreArea: string;
     usuarioEncargadoId: number;
     nombreUsuarioEncargado: string;
+    bodega: boolean
   }

@@ -40,7 +40,7 @@ export class InventarioAsignacionComponent implements OnInit {
   }
 
   cargarAsignaciones(page: number = 0, size: number = 10, filter: string = '', filter_usuario: string = '') {
-    this.itemsService.obtenerAsignaciones(page, size, filter,filter_usuario).subscribe((data: any) => {
+    this.itemsService.obtenerAsignaciones(page, size, filter, filter_usuario).subscribe((data: any) => {
       this.articulosAsignacion = data.content;
       this.filteredAsignacion = [...this.articulosAsignacion];
       this.totalRecords = data.totalElements;
@@ -135,7 +135,7 @@ export class InventarioAsignacionComponent implements OnInit {
             this.notificacion.showSuccess('Asignaciónes exitosas');
             this.cargarAsignaciones();
             const seleccionadosSet = new Set(this.seleccionados);
-            seleccionadosSet.clear(); 
+            seleccionadosSet.clear();
           },
         });
       }
@@ -160,7 +160,7 @@ export class InventarioAsignacionComponent implements OnInit {
 
   aplicarFiltro() {
     this.cargarAsignaciones(this.currentPage, this.pageSize, this.filtroArticulo, this.filtroUsuario);
-    
+
   }
 
   onLazyLoad(event: any) {
@@ -172,29 +172,40 @@ export class InventarioAsignacionComponent implements OnInit {
   }
 
   generarReporteExcel() {
-    
+
   }
 
   eliminarAsignacion(articuloAsignacion: any) {
     const dialogRef = this.dialog.open(DialogConfirmarComponent, {
       width: '400px',
       data: {
-        titulo: 'Confirmar Eliminación',
-        mensaje: '¿Estás seguro de eliminar la asignación del artículo ' + articuloAsignacion.nombreArticulo + ' a '+ articuloAsignacion.nombreAsignado  +'?',
+        titulo: 'Confirmar Devolución',
+        mensaje: '¿Estás seguro de eliminar la asignación del artículo ' + articuloAsignacion.nombreArticulo +
+          ' a ' + articuloAsignacion.nombreAsignado + '?',
       },
-    }); 
+    });
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.itemsService.eliminarAsignacion(articuloAsignacion.idArticulo).subscribe({
-          next: () => {
+          next: (pdfBlob: Blob) => {
+            // ✅ Descargar el PDF automáticamente
+            const url = window.URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `acta_devolucion_${articuloAsignacion.idArticulo}.pdf`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+
             this.notificacion.showSuccess('Asignación eliminada exitosamente.');
             this.cargarAsignaciones();
           },
+          error: () => {
+            this.notificacion.showError('Ocurrió un error al eliminar la asignación.');
+          }
         });
       }
     });
   }
-
-  
 
 }

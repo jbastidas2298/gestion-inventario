@@ -12,7 +12,8 @@ import { AreaService } from 'src/app/services/area.service';
 })
 export class AreaDialogComponent {
   nombre: string = '';
-  usuarioSeleccionado: number | null = null; 
+  usuarioSeleccionado: number | null = null;
+  bodega: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AreaDialogComponent>,
@@ -22,6 +23,7 @@ export class AreaDialogComponent {
     if (this.data.area) {
       this.nombre = this.data.area.nombreArea;
       this.usuarioSeleccionado = this.data.area.usuarioEncargadoId; 
+      this.bodega = this.data.area.bodega;
     }
   }
 
@@ -41,6 +43,7 @@ export class AreaDialogComponent {
       nombreUsuarioEncargado: this.data.usuarios.find(
         (u) => u.id === this.usuarioSeleccionado
       )?.nombreCompleto || '',
+      bodega: this.bodega
     };
 
     if (this.data.area?.id) {

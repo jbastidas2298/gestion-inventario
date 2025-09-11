@@ -3,7 +3,7 @@
     <div class="dashboard-item" (click)="navigateTo('/items')">
       <mat-icon class="dashboard-icon">inventory</mat-icon>
       <h3>Inventario</h3>
-      <p>Crear/Actualizar/Borrar</p>
+      <p *ngIf="isAdmin()">Crear/Actualizar/Borrar</p>
     </div>
 
     <div class="dashboard-item" *ngIf="isAdmin()"  (click)="navigateTo('inventario-asignacion')">
